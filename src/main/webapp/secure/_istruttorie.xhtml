@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Facelet Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link type="text/css" rel="stylesheet" href="../css/base.css" /> 
+        <f:metadata>
+            <f:viewAction action="#{istruttoriaController.initialize()}" />
+        </f:metadata>
+    </h:head>
+    <h:body>
+        Welcome, #{user.username}! (Admin: #{user.admin})
+        <h:form>
+            <h:commandButton value="Logout" action="#{authController.doLogout}" />
+            <hr/>
+            <div class="p-d-flex">
+                <p:dataTable var="istruttoria" value="#{istruttoriaController.istruttorie}" stripedRows="true" size="small" rowHover="true" reflow="true">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{istruttoria.id}"/>
+                    </p:column> 
+                    <p:column headerText="COGNOME">
+                        <h:outputText value="#{istruttoria.cognome}"/>
+                    </p:column> 
+                    <p:column headerText="NOME">
+                        <h:outputText value="#{istruttoria.nome}"/>
+                    </p:column> 
+                    <p:column headerText="# PRATICA">
+                        <h:outputText value="#{istruttoria.idpratica}"/>                    
+                    </p:column> 
+                    <p:column headerText="STATO">
+                        <h:outputText value="#{istruttoria.stato.stato}"/>
+                    </p:column> 
+                    <p:column headerText="IMPORTO LAVORI">
+                        <h:outputText value="#{istruttoria.importolavori}">
+                            <f:convertNumber pattern="#,##0.00 €" />
+                        </h:outputText>
+                    </p:column>                 
+                    <p:column headerText="IVA LAVORI">
+                        <h:outputText value="#{istruttoria.ivalavori}">
+                            <f:convertNumber pattern="#,##0.00 €" />
+                        </h:outputText>
+                    </p:column>                 
+                    <p:column headerText="SPESE TECNICHE">
+                        <h:outputText value="#{istruttoria.spesetecniche}">
+                            <f:convertNumber pattern="#,##0.00 €" />
+                        </h:outputText>
+                    </p:column>                 
+                    <p:column headerText="ST PERIZIA">
+                        <h:outputText value="#{istruttoria.stperizia}">
+                            <f:convertNumber pattern="#,##0.00 €" />
+                        </h:outputText>
+                    </p:column>                 
+                    <p:column headerText="IVA ST PERIZIA">
+                        <h:outputText value="#{istruttoria.ivastperizia}">
+                            <f:convertNumber pattern="#,##0.00 €" />
+                        </h:outputText>
+                    </p:column>                 
+                    <p:column headerText="TOTALE">
+                        <h:outputText value="#{istruttoria.totale}">
+                            <f:convertNumber pattern="#,##0.00 €" />
+                        </h:outputText>
+                    </p:column>                 
+                    <p:column headerText="ESITO ISTRUTTORIA">
+                        <h:outputText value="#{istruttoria.esito.esito}" />                        
+                    </p:column>   
+
+                    <f:facet name="footer">
+                        <span class="p-text-bold">Istruttorie totali: #{fn:length(istruttoriaController.istruttorie)}.</span>
+                    </f:facet>
+                </p:dataTable>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
