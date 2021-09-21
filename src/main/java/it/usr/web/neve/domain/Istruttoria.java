@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,19 +20,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author riccardo.iovenitti
  */
 @Entity
-@Table(name = "istruttoria")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Istruttoria.findAll", query = "SELECT i FROM Istruttoria i"),
-    @NamedQuery(name = "Istruttoria.findAllWithAllegati", query = "SELECT i FROM Istruttoria i JOIN FETCH i.allegatoList"),
     @NamedQuery(name = "Istruttoria.findById", query = "SELECT i FROM Istruttoria i WHERE i.id = :id"),
     @NamedQuery(name = "Istruttoria.findByCognome", query = "SELECT i FROM Istruttoria i WHERE i.cognome = :cognome"),
     @NamedQuery(name = "Istruttoria.findByNome", query = "SELECT i FROM Istruttoria i WHERE i.nome = :nome"),
@@ -44,9 +46,11 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Istruttoria.findByIvastperizia", query = "SELECT i FROM Istruttoria i WHERE i.ivastperizia = :ivastperizia"),
     @NamedQuery(name = "Istruttoria.findByTotale", query = "SELECT i FROM Istruttoria i WHERE i.totale = :totale"),
     @NamedQuery(name = "Istruttoria.findByNote", query = "SELECT i FROM Istruttoria i WHERE i.note = :note"),
+    @NamedQuery(name = "Istruttoria.findByDocumento", query = "SELECT i FROM Istruttoria i WHERE i.documento = :documento"),
     @NamedQuery(name = "Istruttoria.findByVersion", query = "SELECT i FROM Istruttoria i WHERE i.version = :version")})
-public class Istruttoria implements Serializable {    
+public class Istruttoria implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -93,35 +97,28 @@ public class Istruttoria implements Serializable {
     private String documento;
     @Basic(optional = false)
     @NotNull
+    @Version
     private int version;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "istruttoria")
-    private List<Allegato> allegatoList;    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "istruttoria", fetch = FetchType.EAGER)
+    private List<Allegato> allegatoList;
+    @JoinColumn(name = "comune", referencedColumnName = "comune")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Comune comune;
     @JoinColumn(name = "esito", referencedColumnName = "esito")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Esito esito;
     @JoinColumn(name = "stato", referencedColumnName = "stato")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Statolavori stato;
     @JoinColumn(name = "proprietario", referencedColumnName = "username")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Utente proprietario;
 
     public Istruttoria() {
-        importolavori = new BigDecimal(0);
-        ivalavori = new BigDecimal(0);
-        spesetecniche = new BigDecimal(0);
-        stperizia = new BigDecimal(0);
-        ivastperizia = new BigDecimal(0);
     }
 
-    public Istruttoria(Integer id) {        
+    public Istruttoria(Integer id) {
         this.id = id;
-        
-        importolavori = new BigDecimal(0);
-        ivalavori = new BigDecimal(0);
-        spesetecniche = new BigDecimal(0);
-        stperizia = new BigDecimal(0);
-        ivastperizia = new BigDecimal(0);
     }
 
     public Istruttoria(Integer id, String cognome, String nome, int idpratica, String oggettolavori, BigDecimal importolavori, BigDecimal ivalavori, BigDecimal spesetecniche, BigDecimal stperizia, BigDecimal ivastperizia, BigDecimal totale, String documento, int version) {
@@ -252,12 +249,21 @@ public class Istruttoria implements Serializable {
         this.version = version;
     }
 
+    @XmlTransient
     public List<Allegato> getAllegatoList() {
         return allegatoList;
     }
 
     public void setAllegatoList(List<Allegato> allegatoList) {
         this.allegatoList = allegatoList;
+    }
+
+    public Comune getComune() {
+        return comune;
+    }
+
+    public void setComune(Comune comune) {
+        this.comune = comune;
     }
 
     public Esito getEsito() {
@@ -283,7 +289,7 @@ public class Istruttoria implements Serializable {
     public void setProprietario(Utente proprietario) {
         this.proprietario = proprietario;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -298,11 +304,15 @@ public class Istruttoria implements Serializable {
             return false;
         }
         Istruttoria other = (Istruttoria) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Istruttoria[ id=" + id + " ]";
     }
+    
 }

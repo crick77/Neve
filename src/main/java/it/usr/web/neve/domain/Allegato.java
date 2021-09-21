@@ -8,6 +8,7 @@ package it.usr.web.neve.domain;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,12 +19,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author riccardo.iovenitti
  */
 @Entity
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Allegato.findAll", query = "SELECT a FROM Allegato a"),
     @NamedQuery(name = "Allegato.findById", query = "SELECT a FROM Allegato a WHERE a.id = :id"),
@@ -39,9 +42,8 @@ public class Allegato implements Serializable {
     @NotNull
     @Size(min = 1, max = 255)
     private String allegato;
-    @JoinColumns({
-        @JoinColumn(name = "idistruttoria", referencedColumnName = "id")})
-    @ManyToOne(optional = false)
+    @JoinColumns({@JoinColumn(name = "idistruttoria", referencedColumnName = "id")})
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Istruttoria istruttoria;
 
     public Allegato() {
@@ -103,5 +105,6 @@ public class Allegato implements Serializable {
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Allegato[ id=" + id + " ]";
-    }    
+    }
+    
 }

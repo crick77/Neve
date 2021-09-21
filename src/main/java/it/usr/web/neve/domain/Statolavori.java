@@ -10,25 +10,28 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author riccardo.iovenitti
  */
 @Entity
-@Table(name = "statolavori")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Statolavori.findAll", query = "SELECT s FROM Statolavori s"),
     @NamedQuery(name = "Statolavori.findByStato", query = "SELECT s FROM Statolavori s WHERE s.stato = :stato"),
     @NamedQuery(name = "Statolavori.findByAbilitato", query = "SELECT s FROM Statolavori s WHERE s.abilitato = :abilitato")})
-public class Statolavori implements Serializable {    
+public class Statolavori implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -69,6 +72,7 @@ public class Statolavori implements Serializable {
         this.abilitato = abilitato;
     }
 
+    @XmlTransient
     public List<Istruttoria> getIstruttoriaList() {
         return istruttoriaList;
     }
@@ -76,7 +80,7 @@ public class Statolavori implements Serializable {
     public void setIstruttoriaList(List<Istruttoria> istruttoriaList) {
         this.istruttoriaList = istruttoriaList;
     }
-        
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -91,11 +95,15 @@ public class Statolavori implements Serializable {
             return false;
         }
         Statolavori other = (Statolavori) object;
-        return !((this.stato == null && other.stato != null) || (this.stato != null && !this.stato.equals(other.stato)));
+        if ((this.stato == null && other.stato != null) || (this.stato != null && !this.stato.equals(other.stato))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Statolavori[ stato=" + stato + " ]";
-    }    
+    }
+    
 }

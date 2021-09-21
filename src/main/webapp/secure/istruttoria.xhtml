@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,6 +16,7 @@
 
         <f:metadata>
             <f:viewAction action="#{istruttoriaController.initialize()}" />
+            <f:viewParam name="id" value="#{istruttoriaController.idIstruttoria}" />
         </f:metadata>
     </h:head>
     <h:body>
@@ -56,6 +57,12 @@
                 <div class="layout-main">
                     <div class="layout-content documentation" id="doc">
                         <div class="ui-fluid">
+                            <div class="p-field">
+                                <label for="statolavori">COMUNE</label>
+                                <p:selectOneMenu id="comune" value="#{istruttoriaController.istruttoria.comune.comune}">
+                                    <f:selectItems value="#{istruttoriaController.comuni}" var="com" itemValue="#{com.comune}" itemLabel="#{com.comune}" />
+                                </p:selectOneMenu>
+                            </div>
                             <div class="p-field">
                                 <label for="cognome">COGNOME</label>
                                 <p:inputText id="cognome" value="#{istruttoriaController.istruttoria.cognome}" required="true" requiredMessage="Cognome obbligatorio" maxlength="64" converter="toUpperCaseConverter"/>                                
@@ -111,21 +118,44 @@
                                 <p:inputTextarea rows="5" cols="30" counter="display" maxlength="2000" value="#{istruttoriaController.istruttoria.note}" counterTemplate="{0} caratteri disponibili." autoResize="false" converter="toUpperCaseConverter"/>
                                 <h:outputText id="display" class="p-d-block" />
                             </div>
+                            <ui:fragment rendered="#{istruttoriaController.idIstruttoria!=null and istruttoriaController.istruttoria.documento!=null}">
+                                <div class="p-field">
+                                    <label for="extdoc">DOCUMENTO ESISTENTE</label><br/>
+                                    <div class="p-col-2">
+                                        <p:commandButton id="extdoc" value="#{istruttoriaController.istruttoria.documento}" styleClass="rounded-button ui-button-raised ui-button-help" icon="pi pi-trash" action="#{istruttoriaController.rimuoviDocumento()}" update="@form"/>
+                                    </div>
+                                </div>
+                            </ui:fragment> 
                             <div class="p-field">                               
-                                <label for="documento">DOCUMENTO</label><br/>
-                                <p:fileUpload id="documento" label="Seleziona" value="#{istruttoriaController.documento}" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
-                            </div>
+                                <label for="documento">NUOVO DOCUMENTO</label><br/>
+                                <p:fileUpload id="documento" label="Cambia documento" value="#{istruttoriaController.documento}" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
+                            </div>   
+                            <ui:fragment rendered="#{istruttoriaController.idIstruttoria!=null and not empty istruttoriaController.istruttoria.allegatoList}" id="allegatoList">
+                                <div class="p-field">
+                                    <label for="extall">ALLEGATI ESISTENTI</label><br/>
+                                    <ui:repeat value="#{istruttoriaController.istruttoria.allegatoList}" var="allegato">                                                                            
+                                        <div class="p-col-3">
+                                            <p:commandButton id="extall" value="#{allegato.allegato}" styleClass="rounded-button ui-button-raised ui-button-warning" icon="pi pi-trash" action="#{istruttoriaController.rimuoviAllegato(allegato)}" update="@form"/>
+                                        </div>
+                                    </ui:repeat>
+
+                                </div>
+                            </ui:fragment> 
                             <div class="p-field">                               
-                                <label for="documento">ALLEGATI</label><br/>
+                                <label for="allegati">NUOVI ALLEGATI</label><br/>
                                 <p:fileUpload id="allegati" label="Seleziona" value="#{istruttoriaController.allegati}" multiple="true" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
                             </div>
-                            
                             <div class="p-field p-grid">     
-                                <div class="p-col-2">
+                                <div class="p-col-3">
                                     <p:commandButton id="ok" value="Salva" action="#{istruttoriaController.salva}" icon="pi pi-save" update="@form" ajax="false" />
                                 </div>
+                                <ui:fragment rendered="#{istruttoriaController.idIstruttoria!=null}">
+                                    <div class="p-col-3">
+                                        <p:commandButton id="cancel" value="Annulla" icon="pi pi-times" styleClass="ui-button-secondary" action="#{istruttoriaController.annulla()}" ajax="false" />
+                                    </div>
+                                </ui:fragment>
                             </div>
-                            
+
                             <p:growl id="messages" showDetail="true"/>
                         </div>                        
                     </div>                

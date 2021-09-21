@@ -10,25 +10,28 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author riccardo.iovenitti
  */
 @Entity
-@Table(name = "esito")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Esito.findAll", query = "SELECT e FROM Esito e"),
     @NamedQuery(name = "Esito.findByEsito", query = "SELECT e FROM Esito e WHERE e.esito = :esito"),
     @NamedQuery(name = "Esito.findByAbilitato", query = "SELECT e FROM Esito e WHERE e.abilitato = :abilitato")})
 public class Esito implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -69,6 +72,7 @@ public class Esito implements Serializable {
         this.abilitato = abilitato;
     }
 
+    @XmlTransient
     public List<Istruttoria> getIstruttoriaList() {
         return istruttoriaList;
     }
@@ -76,7 +80,7 @@ public class Esito implements Serializable {
     public void setIstruttoriaList(List<Istruttoria> istruttoriaList) {
         this.istruttoriaList = istruttoriaList;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -91,11 +95,15 @@ public class Esito implements Serializable {
             return false;
         }
         Esito other = (Esito) object;
-        return !((this.esito == null && other.esito != null) || (this.esito != null && !this.esito.equals(other.esito)));
+        if ((this.esito == null && other.esito != null) || (this.esito != null && !this.esito.equals(other.esito))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Esito[ esito=" + esito + " ]";
-    }        
+    }
+    
 }

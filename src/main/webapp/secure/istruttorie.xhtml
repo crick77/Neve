@@ -5,7 +5,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <meta charset="utf-8" />
@@ -17,11 +16,11 @@
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
 
         <f:metadata>
-            <f:viewAction action="#{istruttoriaController.initialize()}" />
+            <f:viewAction action="#{istruttorieController.initialize()}" />
         </f:metadata>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="mainform">
             <header>
                 <div class="layout-topbar flex align-items-center justify-content-between">
                     <div class="mobile-menu-wrapper">
@@ -58,12 +57,19 @@
                 <div class="layout-main">
                     <div class="layout-content documentation" id="doc">
                         <div class="p-d-flex">     
-                            <p:remoteCommand name="refreshFooter" update="dtIstruttorie"/>
-                            <p:dataTable id="dtIstruttorie" var="istruttoria" value="#{istruttoriaController.istruttorie}" stripedRows="true" size="small" rowHover="true" reflow="true" emptyMessage="Nessun record presente o corrispondente ai criteri specificati."
-                                         widgetVar="istruttoriaTable" filteredValue="#{istruttoriaController.filteredIstruttorie}" onExpandStart="#{istruttoriaController.loadAllegati(istruttoria)}"> 
-                                <p:ajax event="filter" oncomplete="refreshFooter();" partialSubmit="true"/>
+                            <p:dataTable id="dtIstruttorie" var="istruttoria" value="#{istruttorieController.istruttorie}" stripedRows="true" size="small" rowHover="true" reflow="true" emptyMessage="Nessun record presente o corrispondente ai criteri specificati."
+                                         widgetVar="istruttoriaTable" filteredValue="#{istruttorieController.filteredIstruttorie}"> 
+                                <p:ajax event="filter" update="mainform:totals" />
                                 <p:column style="width:2rem">
                                     <p:rowToggler/>
+                                </p:column>
+                                <p:column headerText="COMUNE" field="comune.comune" filterMatchMode="exact" width="240">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('istruttoriaTable').filter();" styleClass="custom-filter">
+                                            <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{istruttorieController.comuni}" var="comune" itemValue="#{comune.comune}" itemLabel="#{comune.comune}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
                                 </p:column>
                                 <p:column headerText="COGNOME" field="cognome" filterable="true" filterMatchMode="contains" sortable="true" />                                    
                                 <p:column headerText="NOME" field="nome" filterable="true" filterMatchMode="contains" sortable="true" />
@@ -72,7 +78,7 @@
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
                                             <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItems value="#{istruttoriaController.statiLavoro}" var="sl" itemValue="#{sl.stato}" itemLabel="#{sl.stato}" />
+                                            <f:selectItems value="#{istruttorieController.statiLavoro}" var="sl" itemValue="#{sl.stato}" itemLabel="#{sl.stato}" />
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:column> 
@@ -110,7 +116,7 @@
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
                                             <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItems value="#{istruttoriaController.esiti}" var="esito" itemValue="#{esito.esito}" itemLabel="#{esito.esito}" />
+                                            <f:selectItems value="#{istruttorieController.esiti}" var="esito" itemValue="#{esito.esito}" itemLabel="#{esito.esito}" />
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:column>   
@@ -123,7 +129,7 @@
                                 </p:column>
 
                                 <p:column width="40">
-                                    <p:commandButton id="edit" icon="pi pi-pencil" rendered="#{istruttoria.proprietario.username eq user.username}" styleClass="rounded-button ui-button-raised ui-button-success"/>
+                                    <p:commandButton id="edit" icon="pi pi-pencil" rendered="#{istruttoria.proprietario.username eq user.username || user.admin}" styleClass="rounded-button ui-button-raised ui-button-success" ajax="false" action="#{istruttorieController.editPratica(istruttoria.id)}" />                                    
                                     <p:tooltip for="edit" value="Modifica" position="top" rendered="#{istruttoria.proprietario.username eq user.username}"/>
                                 </p:column>
                                 
@@ -131,18 +137,7 @@
                                     <p:commandButton id="delete" icon="pi pi-trash" rendered="#{user.admin}" styleClass="rounded-button ui-button-raised ui-button-danger"/>
                                     <p:tooltip for="delete" value="Elimina" position="top" rendered="#{user.admin}"/>
                                 </p:column>
-
-                                <p:columnGroup type="footer">
-                                    <p:row >
-                                        <p:column colspan="10" style="text-align: right" footerText="Totale:"/>
-                                        <p:column id="totals" style="text-align: right" footerText="#{istruttoriaController.format(istruttoriaController.totale, '#,##0.0 €')}" />                                        
-                                    </p:row>
-                                </p:columnGroup>
-
-                                <f:facet name="footer">
-                                    <span class="p-text-bold">Istruttorie totali: #{fn:length(istruttoriaController.filteredIstruttorie)}.</span>
-                                </f:facet>
-
+                                                               
                                 <p:rowExpansion>
                                     <p:panel header="Note">
                                         <h:panelGroup rendered="#{fn:length(istruttoria.note)>0}">
@@ -162,8 +157,11 @@
                                         </ui:repeat>                                        
                                     </p:panel>   
                                 </p:rowExpansion>                                                                
-                            </p:dataTable>                            
+                            </p:dataTable>                                                                                                 
                         </div>                    
+                        <p:panel id="totals">
+                            <span class="p-text-bold">#{fn:length(istruttorieController.filteredIstruttorie)} istruttorie in elenco per un totale di #{istruttorieController.format(istruttorieController.totale, '#,##0.00 €')}.</span> 
+                        </p:panel>                    
                     </div>                
                 </div>
 

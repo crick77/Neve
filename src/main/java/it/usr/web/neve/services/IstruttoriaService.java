@@ -5,6 +5,7 @@
  */
 package it.usr.web.neve.services;
 
+import it.usr.web.neve.domain.Comune;
 import it.usr.web.neve.domain.Esito;
 import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
@@ -22,13 +23,19 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class IstruttoriaService {
+    public final static boolean SOLO_ABILITATI = true;
+    public final static boolean ABILITATI_E_DISABILITATI = !SOLO_ABILITATI;
     @PersistenceContext
     EntityManager em;
 
     public List<Istruttoria> getIstruttorie() {
         return em.createNamedQuery("Istruttoria.findAll").getResultList();
     }
-           
+        
+    public Istruttoria getIstruttoria(int id) {
+        return em.find(Istruttoria.class, id);
+    }
+    
     public Istruttoria getIstruttorieAllegati(Istruttoria i) {
         i = em.find(Istruttoria.class, i.getId());
         i.getAllegatoList();
@@ -49,6 +56,15 @@ public class IstruttoriaService {
     
     public Statolavori getStatoLavori(String statoLavori) {
         return em.find(Statolavori.class, statoLavori);
+    }
+    
+    public List<Comune> getComuni(boolean soloAbilitati) {
+        if(soloAbilitati) {
+            return em.createNamedQuery("Comune.findByAbilitato").setParameter("abilitato", soloAbilitati).getResultList();
+        }
+        else {
+            return em.createNamedQuery("Comune.findAll").getResultList();
+        }
     }
     
     public boolean isPraticaValida(int idPratica) {

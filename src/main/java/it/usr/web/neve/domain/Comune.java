@@ -6,26 +6,32 @@
 package it.usr.web.neve.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author riccardo.iovenitti
  */
 @Entity
-@Table(name = "comune")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Comune.findAll", query = "SELECT c FROM Comune c"),
     @NamedQuery(name = "Comune.findByComune", query = "SELECT c FROM Comune c WHERE c.comune = :comune"),
     @NamedQuery(name = "Comune.findByAbilitato", query = "SELECT c FROM Comune c WHERE c.abilitato = :abilitato")})
-public class Comune implements Serializable {    
+public class Comune implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -35,10 +41,12 @@ public class Comune implements Serializable {
     @Basic(optional = false)
     @NotNull
     private boolean abilitato;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comune")
+    private List<Istruttoria> istruttoriaList;
 
     public Comune() {
     }
-    
+
     public Comune(String comune) {
         this.comune = comune;
     }
@@ -64,6 +72,15 @@ public class Comune implements Serializable {
         this.abilitato = abilitato;
     }
 
+    @XmlTransient
+    public List<Istruttoria> getIstruttoriaList() {
+        return istruttoriaList;
+    }
+
+    public void setIstruttoriaList(List<Istruttoria> istruttoriaList) {
+        this.istruttoriaList = istruttoriaList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -78,11 +95,15 @@ public class Comune implements Serializable {
             return false;
         }
         Comune other = (Comune) object;
-        return !((this.comune == null && other.comune != null) || (this.comune != null && !this.comune.equals(other.comune)));
+        if ((this.comune == null && other.comune != null) || (this.comune != null && !this.comune.equals(other.comune))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Comune[ comune=" + comune + " ]";
-    }        
+    }
+    
 }

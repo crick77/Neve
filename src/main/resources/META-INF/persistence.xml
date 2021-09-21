@@ -3,11 +3,11 @@
   <!-- Define Persistence Unit -->
   <persistence-unit name="neve_PU" transaction-type="JTA">
     <jta-data-source>jdbc/usrneve</jta-data-source>
-    <class>it.usr.web.neve.domain.Comune</class>
-    <class>it.usr.web.neve.domain.Esito</class>
-    <class>it.usr.web.neve.domain.Istruttoria</class>
-    <class>it.usr.web.neve.domain.Statolavori</class>
     <class>it.usr.web.neve.domain.Utente</class>
+    <class>it.usr.web.neve.domain.Istruttoria</class>
+    <class>it.usr.web.neve.domain.Esito</class>
+    <class>it.usr.web.neve.domain.Comune</class>
+    <class>it.usr.web.neve.domain.Statolavori</class>
     <class>it.usr.web.neve.domain.Allegato</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>

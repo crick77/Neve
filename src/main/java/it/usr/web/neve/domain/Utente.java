@@ -10,26 +10,29 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author riccardo.iovenitti
  */
 @Entity
-@Table(name = "utente")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Utente.findAll", query = "SELECT u FROM Utente u"),
     @NamedQuery(name = "Utente.findByUsername", query = "SELECT u FROM Utente u WHERE u.username = :username"),
     @NamedQuery(name = "Utente.findByAdmin", query = "SELECT u FROM Utente u WHERE u.admin = :admin"),
     @NamedQuery(name = "Utente.findByAbilitato", query = "SELECT u FROM Utente u WHERE u.abilitato = :abilitato")})
-public class Utente implements Serializable {   
+public class Utente implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -82,6 +85,7 @@ public class Utente implements Serializable {
         this.abilitato = abilitato;
     }
 
+    @XmlTransient
     public List<Istruttoria> getIstruttoriaList() {
         return istruttoriaList;
     }
@@ -89,7 +93,7 @@ public class Utente implements Serializable {
     public void setIstruttoriaList(List<Istruttoria> istruttoriaList) {
         this.istruttoriaList = istruttoriaList;
     }
-        
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -104,11 +108,15 @@ public class Utente implements Serializable {
             return false;
         }
         Utente other = (Utente) object;
-        return !((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username)));
+        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Utente[ username=" + username + " ]";
-    }    
+    }
+    
 }
