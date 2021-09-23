@@ -10,10 +10,7 @@ import it.usr.web.neve.domain.Esito;
 import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
 import it.usr.web.neve.services.IstruttoriaService;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -25,7 +22,7 @@ import javax.inject.Named;
  */
 @Named
 @ViewScoped
-public class IstruttorieController implements Serializable {
+public class IstruttorieController extends BaseController {
     @Inject
     IstruttoriaService is;
     private List<Istruttoria> istruttorie;
@@ -52,11 +49,7 @@ public class IstruttorieController implements Serializable {
     public BigDecimal getTotale() {
         return totale;
     }
-    
-    public String format(Object data, String format) {
-        return new DecimalFormat(format).format(data);
-    }
-      
+              
     public List<Istruttoria> getFilteredIstruttorie() {
         return filteredIstruttorie;
     }
@@ -79,21 +72,20 @@ public class IstruttorieController implements Serializable {
         return comuni;
     }
             
-    public void loadAllegati(Istruttoria i) {
+    /*public void loadAllegati(Istruttoria i) {
         Istruttoria _i = is.getIstruttorieAllegati(i);
         i.setAllegatoList(_i.getAllegatoList());
-    }
+    }*/
                
     public String editPratica(int idPratica) {
-        return "istruttoria?includeViewParams=true&faces-redirect=true&id="+idPratica;
+        return redirect(viewParam("istruttoria", "id", idPratica));        
     }     
     
-    public void ricalcolaTotale() {
+    private void ricalcolaTotale() {
         totale = new BigDecimal(0);
         filteredIstruttorie.forEach(i -> {
             totale = totale.add(i.getTotale());
         });
-        System.out.println("Totale = "+totale);
     }
 }
  

@@ -36,8 +36,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Istruttoria.findAll", query = "SELECT i FROM Istruttoria i"),
     @NamedQuery(name = "Istruttoria.findById", query = "SELECT i FROM Istruttoria i WHERE i.id = :id"),
     @NamedQuery(name = "Istruttoria.findByCognome", query = "SELECT i FROM Istruttoria i WHERE i.cognome = :cognome"),
+    @NamedQuery(name = "Istruttoria.findByComune", query = "SELECT i FROM Istruttoria i WHERE i.comune = :comune"),
+    @NamedQuery(name = "Istruttoria.findByEsito", query = "SELECT i FROM Istruttoria i WHERE i.esito = :esito"),
+    @NamedQuery(name = "Istruttoria.findByStato", query = "SELECT i FROM Istruttoria i WHERE i.stato = :stato"),
     @NamedQuery(name = "Istruttoria.findByNome", query = "SELECT i FROM Istruttoria i WHERE i.nome = :nome"),
     @NamedQuery(name = "Istruttoria.findByIdpratica", query = "SELECT i FROM Istruttoria i WHERE i.idpratica = :idpratica"),
+    @NamedQuery(name = "Istruttoria.findByIdpraticaOtherID", query = "SELECT i FROM Istruttoria i WHERE i.idpratica = :idpratica AND i.id <> :id"),
     @NamedQuery(name = "Istruttoria.findByOggettolavori", query = "SELECT i FROM Istruttoria i WHERE i.oggettolavori = :oggettolavori"),
     @NamedQuery(name = "Istruttoria.findByImportolavori", query = "SELECT i FROM Istruttoria i WHERE i.importolavori = :importolavori"),
     @NamedQuery(name = "Istruttoria.findByIvalavori", query = "SELECT i FROM Istruttoria i WHERE i.ivalavori = :ivalavori"),
@@ -46,8 +50,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Istruttoria.findByIvastperizia", query = "SELECT i FROM Istruttoria i WHERE i.ivastperizia = :ivastperizia"),
     @NamedQuery(name = "Istruttoria.findByTotale", query = "SELECT i FROM Istruttoria i WHERE i.totale = :totale"),
     @NamedQuery(name = "Istruttoria.findByNote", query = "SELECT i FROM Istruttoria i WHERE i.note = :note"),
-    @NamedQuery(name = "Istruttoria.findByDocumento", query = "SELECT i FROM Istruttoria i WHERE i.documento = :documento"),
-    @NamedQuery(name = "Istruttoria.findByVersion", query = "SELECT i FROM Istruttoria i WHERE i.version = :version")})
+    @NamedQuery(name = "Istruttoria.findByDocumento", query = "SELECT i FROM Istruttoria i WHERE i.documento = :documento")})  
 public class Istruttoria implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -14,6 +14,11 @@
         <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
         <link rel="stylesheet" href="../css/styles.css" />
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <style>
+            .red {
+                color: red;
+            }
+        </style>
 
         <f:metadata>
             <f:viewAction action="#{istruttorieController.initialize()}" />
@@ -49,6 +54,14 @@
                             </div>
                             <a href="istruttoria.xhtml" style="display: block">
                                 NUOVA
+                            </a>
+                        </li>
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                STATISTICHE
+                            </div>
+                            <a href="stats.xhtml" style="display: block">
+                                STATISTICHE
                             </a>
                         </li>
                     </ul>
@@ -129,13 +142,13 @@
                                 </p:column>
 
                                 <p:column width="40">
-                                    <p:commandButton id="edit" icon="pi pi-pencil" rendered="#{istruttoria.proprietario.username eq user.username || user.admin}" styleClass="rounded-button ui-button-raised ui-button-success" ajax="false" action="#{istruttorieController.editPratica(istruttoria.id)}" />                                    
-                                    <p:tooltip for="edit" value="Modifica" position="top" rendered="#{istruttoria.proprietario.username eq user.username}"/>
+                                    <p:commandButton id="edit" icon="pi pi-pencil" rendered="#{istruttoria.proprietario.username eq utente.username || utente.admin}" styleClass="rounded-button ui-button-raised ui-button-success" ajax="false" action="#{istruttorieController.editPratica(istruttoria.id)}" />                                    
+                                    <p:tooltip for="edit" value="Modifica" position="top" rendered="#{istruttoria.proprietario.username eq utente.username}"/>
                                 </p:column>
                                 
                                 <p:column width="40">
-                                    <p:commandButton id="delete" icon="pi pi-trash" rendered="#{user.admin}" styleClass="rounded-button ui-button-raised ui-button-danger"/>
-                                    <p:tooltip for="delete" value="Elimina" position="top" rendered="#{user.admin}"/>
+                                    <p:commandButton id="delete" icon="pi pi-trash" rendered="#{utente.admin}" styleClass="rounded-button ui-button-raised ui-button-danger"/>
+                                    <p:tooltip for="delete" value="Elimina" position="top" rendered="#{utente.admin}"/>
                                 </p:column>
                                                                
                                 <p:rowExpansion>
@@ -160,7 +173,7 @@
                             </p:dataTable>                                                                                                 
                         </div>                    
                         <p:panel id="totals">
-                            <span class="p-text-bold">#{fn:length(istruttorieController.filteredIstruttorie)} istruttorie in elenco per un totale di #{istruttorieController.format(istruttorieController.totale, '#,##0.00 €')}.</span> 
+                            <span class="p-text-bold"><span class="red">#{fn:length(istruttorieController.filteredIstruttorie)}</span> istruttorie in elenco per un totale di <span class="red">#{istruttorieController.decimalFormat(istruttorieController.totale, '#,##0.00 €')}</span>.</span> 
                         </p:panel>                    
                     </div>                
                 </div>

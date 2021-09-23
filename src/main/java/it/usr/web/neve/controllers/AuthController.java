@@ -7,9 +7,7 @@ package it.usr.web.neve.controllers;
 
 import it.usr.web.neve.domain.Utente;
 import it.usr.web.neve.services.AuthService;
-import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,7 +17,7 @@ import javax.inject.Named;
  */
 @Named
 @RequestScoped
-public class AuthController implements Serializable {
+public class AuthController extends BaseController {
     @Inject
     private AuthService as;
     private String username;
@@ -29,18 +27,18 @@ public class AuthController implements Serializable {
     public String doLogin() {
         Utente u = as.authenticate(username, password);
         if(u!=null) {
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", u);
-            return "/secure/istruttorie?faces-redirect=true";
+            putIntoSession(u);            
+            return redirect("/secure/istruttorie");
         }
         else {
             message = "Wrong credentials";
-            return null;
+            return SAME_VIEW;
         }
     }
     
     public String doLogout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "/index?faces-redirect=true";
+        invalidateSession();
+        return redirect("/index");
     }
 
     public String getUsername() {

@@ -36,11 +36,11 @@ public class IstruttoriaService {
         return em.find(Istruttoria.class, id);
     }
     
-    public Istruttoria getIstruttorieAllegati(Istruttoria i) {
-        i = em.find(Istruttoria.class, i.getId());
+    /*public Istruttoria getIstruttorieAllegati(Istruttoria i) {
+        i = em.find(Istruttoria.class, i.getId());        
         i.getAllegatoList();
         return i;
-    }
+    }*/
     
     public List<Statolavori> getStatiLavoro() {
         return em.createNamedQuery("Statolavori.findAll").getResultList();
@@ -48,6 +48,10 @@ public class IstruttoriaService {
     
     public List<Esito> getEsiti() {
         return em.createNamedQuery("Esito.findAll").getResultList();
+    }
+    
+    public Comune getComune(String comune) {
+        return em.find(Comune.class, comune);
     }
     
     public Esito getEsito(String esito) {
@@ -67,14 +71,35 @@ public class IstruttoriaService {
         }
     }
     
-    public boolean isPraticaValida(int idPratica) {
-        List<Istruttoria> lIstr = em.createNamedQuery("Istruttoria.findByIdpratica").setParameter("idpratica", idPratica).getResultList();
-        return lIstr.isEmpty();
+    public boolean isPraticaValida(int idPratica, Integer id) {
+        // Nuova pratica?
+        if(id==null) {
+            // Non devono essercene altre
+            List<Istruttoria> lIstr = em.createNamedQuery("Istruttoria.findByIdpratica").setParameter("idpratica", idPratica).getResultList();
+            return lIstr.isEmpty();
+        }
+        else {
+            // Modifica, recupera la precedente versione
+            Istruttoria i = em.find(Istruttoria.class, id);
+            // Se la pratica è cambiata
+            if(i.getIdpratica()!=idPratica) {
+                // Il nuovo numero è già stato usato?
+                List<Istruttoria> lIstr = em.createNamedQuery("Istruttoria.findByIdpraticaOtherID").setParameter("idpratica", idPratica).setParameter("id", id).getResultList();
+                return lIstr.isEmpty();
+            }
+            
+            // La pratica non è cambiata, tutto ok
+            return true;
+        }
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Istruttoria save(Istruttoria is) {
+        if(is.getId()!=null) {
+            return em.merge(is);
+        }
+        
         em.persist(is);
-        return is;
+        return is;        
     }
 }

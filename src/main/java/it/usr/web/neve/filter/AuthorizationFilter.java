@@ -5,6 +5,8 @@
  */
 package it.usr.web.neve.filter;
 
+import it.usr.web.neve.controllers.BaseController;
+import it.usr.web.neve.domain.Utente;
 import java.io.IOException;
 import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;
@@ -20,7 +22,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author riccardo.iovenitti
+ * @author BalusC
  */
 @WebFilter("/secure/*")
 public class AuthorizationFilter implements Filter {
@@ -34,7 +36,7 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = request.getSession(false);
         String loginURL = request.getContextPath() + "/index.xhtml";
 
-        boolean loggedIn = (session != null) && (session.getAttribute("user") != null);
+        boolean loggedIn = (session != null) && (session.getAttribute(BaseController.getSessionClassName(Utente.class)) != null);
         boolean loginRequest = request.getRequestURI().equals(loginURL);
         boolean resourceRequest = request.getRequestURI().startsWith(request.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER + "/");
         boolean ajaxRequest = "partial/ajax".equals(request.getHeader("Faces-Request"));
