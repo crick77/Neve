@@ -69,6 +69,20 @@
 
                 <div class="layout-main">
                     <div class="layout-content documentation" id="doc">
+                        <div>
+                            <h5>Esporta dati visualizzati</h5>
+                            <p:commandButton value="XLS" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
+                                <p:dataExporter type="xls" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true"/>
+                            </p:commandButton>
+
+                            <p:commandButton value="XLXS" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
+                                <p:dataExporter type="xlsxstream" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true"/>
+                            </p:commandButton>
+
+                            <p:commandButton value="PDF" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
+                                <p:dataExporter type="pdf" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true"/>
+                            </p:commandButton>
+                        </div>
                         <div class="p-d-flex">     
                             <p:dataTable id="dtIstruttorie" var="istruttoria" value="#{istruttorieController.istruttorie}" stripedRows="true" size="small" rowHover="true" reflow="true" emptyMessage="Nessun record presente o corrispondente ai criteri specificati."
                                          widgetVar="istruttoriaTable" filteredValue="#{istruttorieController.filteredIstruttorie}"> 
@@ -125,10 +139,11 @@
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
                                 </p:column>                 
-                                <p:column headerText="ESITO ISTRUTTORIA" filterMatchMode="exact" field="esito.esito" width="200">
+                                <p:column headerText="ESITO ISTRUTTORIA" filterable="true" filterMatchMode="contains" field="esito.esito" width="200">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
                                             <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Ammesso istr." itemValue="Ammesso istr." />
                                             <f:selectItems value="#{istruttorieController.esiti}" var="esito" itemValue="#{esito.esito}" itemLabel="#{esito.esito}" />
                                         </p:selectOneMenu>
                                     </f:facet>
@@ -145,12 +160,12 @@
                                     <p:commandButton id="edit" icon="pi pi-pencil" rendered="#{istruttoria.proprietario.username eq utente.username || utente.admin}" styleClass="rounded-button ui-button-raised ui-button-success" ajax="false" action="#{istruttorieController.editPratica(istruttoria.id)}" />                                    
                                     <p:tooltip for="edit" value="Modifica" position="top" rendered="#{istruttoria.proprietario.username eq utente.username}"/>
                                 </p:column>
-                                
+
                                 <p:column width="40">
                                     <p:commandButton id="delete" icon="pi pi-trash" rendered="#{utente.admin}" styleClass="rounded-button ui-button-raised ui-button-danger"/>
                                     <p:tooltip for="delete" value="Elimina" position="top" rendered="#{utente.admin}"/>
                                 </p:column>
-                                                               
+
                                 <p:rowExpansion>
                                     <p:panel header="Note">
                                         <h:panelGroup rendered="#{fn:length(istruttoria.note)>0}">

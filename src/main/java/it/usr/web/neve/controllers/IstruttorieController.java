@@ -11,6 +11,8 @@ import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
 import it.usr.web.neve.services.IstruttoriaService;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -86,6 +88,10 @@ public class IstruttorieController extends BaseController {
         filteredIstruttorie.forEach(i -> {
             totale = totale.add(i.getTotale());
         });
+    }
+    
+    public String getOggi() {
+        return new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     }
 }
  
