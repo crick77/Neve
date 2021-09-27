@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.usr.web.neve.controllers;
+package it.usr.web.neve.controller;
 
 import it.usr.web.neve.domain.Allegato;
 import it.usr.web.neve.domain.Istruttoria;
-import it.usr.web.neve.services.IstruttoriaService;
+import it.usr.web.neve.service.IstruttoriaService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -34,6 +36,8 @@ public class DownloadController {
     IstruttoriaService is;
     StreamedContent file;
     Map<String, String> mime = new HashMap<>();
+    @Resource(lookup="neve/uploadBasePath")
+    String basePath;
     
     public DownloadController() {        
         mime.put("doc", "application/msword");
@@ -41,9 +45,16 @@ public class DownloadController {
         mime.put("pdf", "application/pdf");
     }
     
+    @PostConstruct
+    public void setup() {
+        if(basePath==null || basePath.trim().length()==0) throw new IllegalArgumentException("uploadBasePath not set.");
+        basePath = basePath.trim();
+        if(!basePath.endsWith("/")) basePath+="/";
+    }
+    
     public void prepare(Istruttoria i) {        
         try {    
-            Path p = Paths.get("c:/dev/uploads/"+i.getIdpratica()+"/"+i.getDocumento());
+            Path p = Paths.get(basePath+i.getIdpratica()+"/"+i.getDocumento());
             InputStream _is = Files.newInputStream(p);
             file = DefaultStreamedContent.builder()
                 .name(i.getDocumento())
@@ -59,7 +70,7 @@ public class DownloadController {
     
     public void prepare(Allegato a) {        
         try {    
-            Path p = Paths.get("c:/dev/uploads/"+a.getIstruttoria().getIdpratica()+"/att/"+a.getAllegato());
+            Path p = Paths.get(basePath+a.getIstruttoria().getIdpratica()+"/att/"+a.getAllegato());
             
             InputStream _is = Files.newInputStream(p);
             file = DefaultStreamedContent.builder()

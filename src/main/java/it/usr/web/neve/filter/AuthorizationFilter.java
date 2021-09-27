@@ -5,7 +5,7 @@
  */
 package it.usr.web.neve.filter;
 
-import it.usr.web.neve.controllers.BaseController;
+import it.usr.web.neve.controller.BaseController;
 import it.usr.web.neve.domain.Utente;
 import java.io.IOException;
 import javax.faces.application.ResourceHandler;

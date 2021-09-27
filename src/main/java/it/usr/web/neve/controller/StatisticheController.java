@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.usr.web.neve.controllers;
+package it.usr.web.neve.controller;
 
 import it.usr.web.neve.model.Stat;
-import it.usr.web.neve.services.StatisticheService;
+import it.usr.web.neve.service.StatisticheService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +99,8 @@ public class StatisticheController extends BaseController {
             
             labels.add(com.getVoce());
         });
+        
+        if(true) throw new IllegalArgumentException("prova!");
         
         creaEsitoChart();
         

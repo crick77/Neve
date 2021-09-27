@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.usr.web.neve.services;
+package it.usr.web.neve.service;
 
 import it.usr.web.neve.domain.Comune;
 import it.usr.web.neve.domain.Esito;
@@ -35,13 +35,7 @@ public class IstruttoriaService {
     public Istruttoria getIstruttoria(int id) {
         return em.find(Istruttoria.class, id);
     }
-    
-    /*public Istruttoria getIstruttorieAllegati(Istruttoria i) {
-        i = em.find(Istruttoria.class, i.getId());        
-        i.getAllegatoList();
-        return i;
-    }*/
-    
+         
     public List<Statolavori> getStatiLavoro() {
         return em.createNamedQuery("Statolavori.findAll").getResultList();
     }
@@ -94,12 +88,20 @@ public class IstruttoriaService {
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Istruttoria save(Istruttoria is) {
+    public Istruttoria salva(Istruttoria is) {
         if(is.getId()!=null) {
             return em.merge(is);
         }
         
         em.persist(is);
         return is;        
+    }
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void elminia(Istruttoria is) {
+        if(is==null || is.getId()==null) throw new IllegalArgumentException("istruttoria or id null");
+        
+        Istruttoria i = em.find(Istruttoria.class, is.getId());
+        em.remove(i);        
     }
 }

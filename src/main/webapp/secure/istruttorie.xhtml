@@ -80,14 +80,14 @@
                             </p:commandButton>
 
                             <p:commandButton value="PDF" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
-                                <p:dataExporter type="pdf" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true"/>
+                                <p:dataExporter type="pdf" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true" options="#{istruttorieController.pdfOpt}" postProcessor="#{istruttorieController.postProcessPDF}"/>
                             </p:commandButton>
                         </div>
                         <div class="p-d-flex">     
                             <p:dataTable id="dtIstruttorie" var="istruttoria" value="#{istruttorieController.istruttorie}" stripedRows="true" size="small" rowHover="true" reflow="true" emptyMessage="Nessun record presente o corrispondente ai criteri specificati."
                                          widgetVar="istruttoriaTable" filteredValue="#{istruttorieController.filteredIstruttorie}"> 
                                 <p:ajax event="filter" update="mainform:totals" />
-                                <p:column style="width:2rem">
+                                <p:column style="width:2rem" exportable="false">
                                     <p:rowToggler/>
                                 </p:column>
                                 <p:column headerText="COMUNE" field="comune.comune" filterMatchMode="exact" width="240">
@@ -149,20 +149,22 @@
                                     </f:facet>
                                 </p:column>   
 
-                                <p:column width="40">
+                                <p:column width="40" exportable="false">
                                     <p:commandButton id="doc" icon="pi pi-file-pdf" styleClass="rounded-button ui-button-raised ui-button-help" actionListener="#{downloadController.prepare(istruttoria)}" ajax="false">
                                         <p:fileDownload value="#{downloadController.file}" />
                                     </p:commandButton>
                                     <p:tooltip for="doc" value="Documento" position="top" />
                                 </p:column>
 
-                                <p:column width="40">
+                                <p:column width="40" exportable="false">
                                     <p:commandButton id="edit" icon="pi pi-pencil" rendered="#{istruttoria.proprietario.username eq utente.username || utente.admin}" styleClass="rounded-button ui-button-raised ui-button-success" ajax="false" action="#{istruttorieController.editPratica(istruttoria.id)}" />                                    
                                     <p:tooltip for="edit" value="Modifica" position="top" rendered="#{istruttoria.proprietario.username eq utente.username}"/>
                                 </p:column>
 
-                                <p:column width="40">
-                                    <p:commandButton id="delete" icon="pi pi-trash" rendered="#{utente.admin}" styleClass="rounded-button ui-button-raised ui-button-danger"/>
+                                <p:column width="40" exportable="false">
+                                    <p:commandButton id="delete" icon="pi pi-trash" rendered="#{utente.admin}" styleClass="rounded-button ui-button-raised ui-button-danger" action="#{istruttorieController.elimina(istruttoria)}" update="@form" onclick="PF('istruttoriaTable').clearFilters();">
+                                        <p:confirm type="popup" header="Conferma" message="Eliminare la pratica? L'operazione è irreversibile." icon="pi pi-exclamation-triangle"/>
+                                    </p:commandButton>
                                     <p:tooltip for="delete" value="Elimina" position="top" rendered="#{utente.admin}"/>
                                 </p:column>
 
@@ -189,7 +191,12 @@
                         </div>                    
                         <p:panel id="totals">
                             <span class="p-text-bold"><span class="red">#{fn:length(istruttorieController.filteredIstruttorie)}</span> istruttorie in elenco per un totale di <span class="red">#{istruttorieController.decimalFormat(istruttorieController.totale, '#,##0.00 €')}</span>.</span> 
-                        </p:panel>                    
+                        </p:panel>       
+
+                        <p:confirmPopup global="true">
+                            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" />
+                        </p:confirmPopup>
                     </div>                
                 </div>
 

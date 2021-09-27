@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.usr.web.neve.services;
+package it.usr.web.neve.service;
 
 import it.usr.web.neve.domain.Utente;
 import javax.ejb.Stateless;

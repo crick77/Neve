@@ -43,13 +43,15 @@
                                 ISTRUTTORIE
                             </a>
                         </li>
-                        <li class="active-menuitem">  
+                        <li class="active-menuitem">
                             <div class="menuitem-root-text mt-3">
-                                NUOVA
+                                #{istruttoriaController.istruttoria.id==null ? 'NUOVA' : 'MODIFICA'}
                             </div>
-                            <a href="istruttoria.xhtml" style="display: block">
-                                NUOVA
-                            </a>
+                            <ui:fragment rendered="#{empty istruttoriaController.istruttoria.id}">
+                                <a href="istruttoria.xhtml" style="display: block">
+                                    NUOVA
+                                </a>
+                            </ui:fragment>                            
                         </li>
                         <li>  
                             <div class="menuitem-root-text mt-3">

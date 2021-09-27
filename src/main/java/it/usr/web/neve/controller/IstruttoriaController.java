@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package it.usr.web.neve.controllers;
+package it.usr.web.neve.controller;
 
 import it.usr.web.neve.domain.Allegato;
 import it.usr.web.neve.domain.Comune;
@@ -11,7 +11,7 @@ import it.usr.web.neve.domain.Esito;
 import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
 import it.usr.web.neve.domain.Utente;
-import it.usr.web.neve.services.IstruttoriaService;
+import it.usr.web.neve.service.IstruttoriaService;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -27,6 +30,8 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.OptimisticLockException;
+import javax.persistence.RollbackException;
 import org.primefaces.model.file.UploadedFile;
 import org.primefaces.model.file.UploadedFiles;
 
@@ -37,7 +42,8 @@ import org.primefaces.model.file.UploadedFiles;
 @Named
 @ViewScoped
 public class IstruttoriaController extends BaseController {
-    private final static String STORAGE_PATH = "c:/dev/uploads/";
+    @Resource(lookup="neve/uploadBasePath")
+    private String basePath;
     @Inject
     IstruttoriaService is;
     private Istruttoria istruttoria;
@@ -49,6 +55,13 @@ public class IstruttoriaController extends BaseController {
     private List<Comune> comuni;
     private List<String> filesToBeRemoved;
 
+    @PostConstruct
+    public void setup() {
+        if(basePath==null || basePath.trim().length()==0) throw new IllegalArgumentException("uploadBasePath not set.");
+        basePath = basePath.trim();
+        if(!basePath.endsWith("/")) basePath+="/";
+    }
+    
     public String initialize() {
         filesToBeRemoved = new ArrayList<>();
         
@@ -124,7 +137,7 @@ public class IstruttoriaController extends BaseController {
             return SAME_VIEW;
         }
         
-        // Modifica, controlla documento
+        // Nuova
         if(istruttoria.getId()==null) {                            
             if (documento == null || documento.getFileName() == null) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
@@ -146,7 +159,8 @@ public class IstruttoriaController extends BaseController {
                 Utente u = (Utente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
                 istruttoria.setProprietario(u); 
                 
-                is.save(istruttoria);
+                
+                is.salva(istruttoria);                
             }            
         }
         else {
@@ -171,7 +185,17 @@ public class IstruttoriaController extends BaseController {
                 _totale = _totale.add(istruttoria.getIvastperizia());
                 istruttoria.setTotale(_totale);
                 
-                is.save(istruttoria);
+                try {
+                    is.salva(istruttoria);
+                }
+                catch(EJBException ee) {
+                    OptimisticLockException e = (OptimisticLockException)unrollException(ee, OptimisticLockException.class);
+                    if(e!=null) {
+                       return "ole";
+                    }
+                    
+                    throw ee;
+                }
                 
                 rimuoviFileEliminati();
             }
@@ -183,17 +207,17 @@ public class IstruttoriaController extends BaseController {
     private boolean salvaDocumentoAllegati() {
         try {
             if(documento.getFileName()!=null) {
-                Files.createDirectories(Paths.get(STORAGE_PATH + istruttoria.getIdpratica() + "/"));
-                Files.write(Paths.get(STORAGE_PATH + istruttoria.getIdpratica() + "/" + documento.getFileName()), documento.getContent());
+                Files.createDirectories(Paths.get(basePath + istruttoria.getIdpratica() + "/"));
+                Files.write(Paths.get(basePath + istruttoria.getIdpratica() + "/" + documento.getFileName()), documento.getContent());
                 documento.delete();
                 istruttoria.setDocumento(documento.getFileName());
             }
 
             if (allegati.getSize() > 0) {
-                Files.createDirectories(Paths.get(STORAGE_PATH + istruttoria.getIdpratica() + "/att/"));
+                Files.createDirectories(Paths.get(basePath + istruttoria.getIdpratica() + "/att/"));
 
                 for (UploadedFile all : allegati.getFiles()) {
-                    Files.write(Paths.get(STORAGE_PATH + istruttoria.getIdpratica() + "/att/" + all.getFileName()), all.getContent());
+                    Files.write(Paths.get(basePath + istruttoria.getIdpratica() + "/att/" + all.getFileName()), all.getContent());
                     all.delete();
 
                     Allegato a = new Allegato();
@@ -238,7 +262,7 @@ public class IstruttoriaController extends BaseController {
     private void rimuoviFileEliminati() {
         filesToBeRemoved.forEach(f -> {
             try {
-                Files.deleteIfExists(Paths.get(STORAGE_PATH + istruttoria.getIdpratica()+ "/" + f));
+                Files.deleteIfExists(Paths.get(basePath + istruttoria.getIdpratica()+ "/" + f));
             }
             catch(IOException ex) {
                 Logger.getLogger(IstruttorieController.class.getName()).log(Level.SEVERE, null, ex);
