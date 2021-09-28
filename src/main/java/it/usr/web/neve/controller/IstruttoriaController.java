@@ -11,6 +11,7 @@ import it.usr.web.neve.domain.Esito;
 import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
 import it.usr.web.neve.domain.Utente;
+import it.usr.web.neve.producer.NeveLogger;
 import it.usr.web.neve.service.IstruttoriaService;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,8 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
@@ -31,9 +30,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.OptimisticLockException;
-import javax.persistence.RollbackException;
 import org.primefaces.model.file.UploadedFile;
 import org.primefaces.model.file.UploadedFiles;
+import org.slf4j.Logger;
 
 /**
  *
@@ -42,33 +41,42 @@ import org.primefaces.model.file.UploadedFiles;
 @Named
 @ViewScoped
 public class IstruttoriaController extends BaseController {
-    @Resource(lookup="neve/uploadBasePath")
+    @Resource(lookup = "neve/uploadBasePath")
     private String basePath;
     @Inject
     IstruttoriaService is;
+    @Inject
+    @NeveLogger
+    Logger logger;
     private Istruttoria istruttoria;
     private Integer idIstruttoria;
     private UploadedFile documento;
     private UploadedFiles allegati;
-    private List<Statolavori> statilavoro;    
+    private List<Statolavori> statilavoro;
     private List<Esito> esiti;
     private List<Comune> comuni;
     private List<String> filesToBeRemoved;
 
     @PostConstruct
     public void setup() {
-        if(basePath==null || basePath.trim().length()==0) throw new IllegalArgumentException("uploadBasePath not set.");
+        if (basePath == null || basePath.trim().length() == 0) {
+            throw new IllegalArgumentException("uploadBasePath not set.");
+        }
         basePath = basePath.trim();
-        if(!basePath.endsWith("/")) basePath+="/";
+        if (!basePath.endsWith("/")) {
+            basePath += "/";
+        }
+        
+        logger.info("Cartella di upload/download impostata su [{}].", basePath);
     }
-    
+
     public String initialize() {
         filesToBeRemoved = new ArrayList<>();
-        
+
         if (idIstruttoria != null) {
             istruttoria = is.getIstruttoria(idIstruttoria);
             Utente utente = getUtente();
-            if(!(istruttoria.getProprietario().getUsername().equals(utente.getUsername()) || utente.getAdmin()) && !utente.getAbilitato()) {
+            if (!(istruttoria.getProprietario().getUsername().equals(utente.getUsername()) || utente.getAdmin()) && !utente.getAbilitato()) {
                 return redirect("unauth");
             }
         } else {
@@ -78,11 +86,11 @@ public class IstruttoriaController extends BaseController {
             istruttoria.setEsito(new Esito());
             istruttoria.setAllegatoList(new ArrayList<>());
         }
-        
+
         statilavoro = is.getStatiLavoro();
         esiti = is.getEsiti();
-        comuni = is.getComuni(IstruttoriaService.SOLO_ABILITATI);     
-        
+        comuni = is.getComuni(IstruttoriaService.SOLO_ABILITATI);
+
         return SAME_VIEW;
     }
 
@@ -117,7 +125,7 @@ public class IstruttoriaController extends BaseController {
     public void setAllegati(UploadedFiles allegati) {
         this.allegati = allegati;
     }
-    
+
     public List<Statolavori> getStatiLavoro() {
         return statilavoro;
     }
@@ -129,23 +137,23 @@ public class IstruttoriaController extends BaseController {
     public List<Comune> getComuni() {
         return comuni;
     }
-            
+
     public String salva() {
         if (!is.isPraticaValida(istruttoria.getIdpratica(), istruttoria.getId())) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Attenzione", "Id pratica utilizzato.");
             FacesContext.getCurrentInstance().addMessage("pratica", message);
             return SAME_VIEW;
         }
-        
+
         // Nuova
-        if(istruttoria.getId()==null) {                            
+        if (istruttoria.getId() == null) {
             if (documento == null || documento.getFileName() == null) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
                 FacesContext.getCurrentInstance().addMessage("documento", message);
                 return SAME_VIEW;
             }
-            
-            if(salvaDocumentoAllegati()) {           
+
+            if (salvaDocumentoAllegati()) {
                 istruttoria.setComune(is.getComune(istruttoria.getComune().getComune()));
                 istruttoria.setEsito(is.getEsito(istruttoria.getEsito().getEsito()));
                 istruttoria.setStato(is.getStatoLavori(istruttoria.getStato().getStato()));
@@ -157,23 +165,21 @@ public class IstruttoriaController extends BaseController {
                 _totale = _totale.add(istruttoria.getIvastperizia());
                 istruttoria.setTotale(_totale);
                 Utente u = (Utente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-                istruttoria.setProprietario(u); 
-                
-                
-                is.salva(istruttoria);                
-            }            
-        }
-        else {
+                istruttoria.setProprietario(u);
+
+                is.salva(istruttoria);
+            }
+        } else {
             // modifica
-            
+
             // rimosso documento e nessuno aggiunto?
-            if(istruttoria.getDocumento()==null && documento.getFileName()==null) {
+            if (istruttoria.getDocumento() == null && documento.getFileName() == null) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
                 FacesContext.getCurrentInstance().addMessage("documento", message);
                 return SAME_VIEW;
             }
-            
-            if(salvaDocumentoAllegati()) {
+
+            if (salvaDocumentoAllegati()) {
                 istruttoria.setComune(is.getComune(istruttoria.getComune().getComune()));
                 istruttoria.setEsito(is.getEsito(istruttoria.getEsito().getEsito()));
                 istruttoria.setStato(is.getStatoLavori(istruttoria.getStato().getStato()));
@@ -184,29 +190,30 @@ public class IstruttoriaController extends BaseController {
                 _totale = _totale.add(istruttoria.getStperizia());
                 _totale = _totale.add(istruttoria.getIvastperizia());
                 istruttoria.setTotale(_totale);
-                
+
                 try {
                     is.salva(istruttoria);
-                }
-                catch(EJBException ee) {
-                    OptimisticLockException e = (OptimisticLockException)unrollException(ee, OptimisticLockException.class);
-                    if(e!=null) {
-                       return "ole";
+                } catch (EJBException ee) {
+                    OptimisticLockException e = (OptimisticLockException) unrollException(ee, OptimisticLockException.class);
+                    if (e != null) {
+                        logger.error("Impossibile aggiornare l'istruttoria id {} per una eccezione di lock ottimistico.", istruttoria.getId());
+                        return "ole";
                     }
-                    
+
+                    logger.error("Impossibile aggiornare l'istruttoria id {} per una eccezione {}", istruttoria.getId(), ee);
                     throw ee;
                 }
-                
+
                 rimuoviFileEliminati();
             }
         }
-       
+
         return redirect("istruttorie");
     }
 
     private boolean salvaDocumentoAllegati() {
         try {
-            if(documento.getFileName()!=null) {
+            if (documento.getFileName() != null) {
                 Files.createDirectories(Paths.get(basePath + istruttoria.getIdpratica() + "/"));
                 Files.write(Paths.get(basePath + istruttoria.getIdpratica() + "/" + documento.getFileName()), documento.getContent());
                 documento.delete();
@@ -225,16 +232,16 @@ public class IstruttoriaController extends BaseController {
                     a.setAllegato(all.getFileName());
                     istruttoria.getAllegatoList().add(a);
                 }
-            }                                                          
-            
+            }
+
             return true;
         } catch (IOException ex) {
-            Logger.getLogger(IstruttorieController.class.getName()).log(Level.SEVERE, null, ex);
-            
+            logger.error("Impossibile caricare il documento/allegati alla pratica {} a causa di ", istruttoria.getId(), ex);
+
             return false;
         }
     }
-    
+
     public void validaIdPratica(AjaxBehaviorEvent event) {
         if (!is.isPraticaValida(istruttoria.getIdpratica(), istruttoria.getId())) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Attenzione", "Id pratica utilizzato.");
@@ -244,28 +251,27 @@ public class IstruttoriaController extends BaseController {
             pratica.setValid(false);
         }
     }
-    
+
     public void rimuoviAllegato(Allegato allegato) {
         istruttoria.getAllegatoList().remove(allegato);
-        filesToBeRemoved.add("att/"+allegato.getAllegato());
+        filesToBeRemoved.add("att/" + allegato.getAllegato());
     }
-    
+
     public void rimuoviDocumento() {
         filesToBeRemoved.add(istruttoria.getDocumento());
         istruttoria.setDocumento(null);
     }
-    
+
     public String annulla() {
         return redirect("istruttorie");
     }
-    
+
     private void rimuoviFileEliminati() {
         filesToBeRemoved.forEach(f -> {
             try {
-                Files.deleteIfExists(Paths.get(basePath + istruttoria.getIdpratica()+ "/" + f));
-            }
-            catch(IOException ex) {
-                Logger.getLogger(IstruttorieController.class.getName()).log(Level.SEVERE, null, ex);
+                Files.deleteIfExists(Paths.get(basePath + istruttoria.getIdpratica() + "/" + f));
+            } catch (IOException ex) {
+                logger.error("Impossibile rimuovere il file [{}] dell'istruttoria con id {} a causa di {}", f, istruttoria.getId(), ex);
             }
         });
     }

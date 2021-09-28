@@ -33,11 +33,11 @@ public class AuthController extends BaseController {
         Utente u = as.authenticate(username, password);
         if(u!=null) {
             putIntoSession(u);            
-            logger.debug("L''utente [{}] ha effettuato l''accesso.", username);
+            logger.debug("L'utente [{}] ha effettuato l'accesso.", username);
             return redirect("/secure/istruttorie");
         }
         else {
-            logger.debug("L''utente [{}] non esiste o la password è errata.", username);
+            logger.debug("L'utente [{}] non esiste o la password è errata.", username);
             message = "Username e/o password errati.";
             return SAME_VIEW;
         }
@@ -45,7 +45,7 @@ public class AuthController extends BaseController {
     
     public String doLogout() {
         invalidateSession();
-        logger.debug("L''utente [{}] ha effettuato la disconnessione.", username);
+        logger.debug("L'utente [{}] ha effettuato la disconnessione.", username);
         return redirect("/index");
     }
 

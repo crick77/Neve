@@ -69,6 +69,13 @@
             <version>3.11.1</version>
         </dependency>
 
+        <!-- The org.codehaus.janino:commons-compiler:3.1.6 dependency -->
+        <!-- will be automatically pulled in by Maven's transitivity rules -->
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.1.6</version>
+        </dependency>
     </dependencies>
     
     <build>

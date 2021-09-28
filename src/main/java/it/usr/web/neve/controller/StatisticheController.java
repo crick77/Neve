@@ -99,9 +99,7 @@ public class StatisticheController extends BaseController {
             
             labels.add(com.getVoce());
         });
-        
-        if(true) throw new IllegalArgumentException("prova!");
-        
+                
         creaEsitoChart();
         
         bgColors = new ArrayList<>();

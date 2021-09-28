@@ -7,6 +7,7 @@ package it.usr.web.neve.handler;
 
 import it.usr.web.neve.producer.NeveLogger;
 import java.util.Arrays;
+import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -35,14 +36,13 @@ public class NeveExceptionHandler extends FullAjaxExceptionHandler {
         
     @Override
     protected void logException(FacesContext context, Throwable exception, String location, String message, Object... parameters) {
-        logger.error("Errore ''{0}'' pagina ''{1}'' eccezione ''{2}'' parametri ''{3}''.", new Object[]{message, location, exception, Arrays.toString(parameters)});
+        if (exception instanceof ViewExpiredException) {
+            // With exception==null, no trace will be logged.
+            super.logException(context, null, location, message, parameters);
+        }
+        else {
+            logger.error("Errore '{}' pagina '{}' eccezione '{}' parametri '{}'.", new Object[]{message, location, exception, Arrays.toString(parameters)});
+        }        
     }        
-
-    @Override
-    protected void logException(FacesContext context, Throwable exception, String location, LogReason reason) {
-        logger.error("Errore pagina ''{0}'' eccezione ''{1}'' motivo ''{2}''.", new Object[]{location, exception, reason.getMessage()});
-    }
-    
-    
 }
  
