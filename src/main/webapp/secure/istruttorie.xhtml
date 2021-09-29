@@ -9,7 +9,7 @@
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PrimeFlex</title>
+        <title>USR NEVE - Istruttorie</title>
         <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
         <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
         <link rel="stylesheet" href="../css/styles.css" />
@@ -33,8 +33,11 @@
                         <img src="../images/logomain.png" alt="prime" id="mobile-logo" />                    
                     </div>
                     <div class="layout-topbar-left">
-                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />
-                    </div>
+                        <div>
+                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
+                        </div>
+                        <ul class="topbar-menu"><li><span class="pi pi-user" /> Benvenuto, <i>#{utente.username}!</i><h:outputText rendered="#{utente.admin}" value=" - Amministratore" /></li></ul>
+                    </div>                                        
                 </div>
             </header>
             <main>
@@ -62,6 +65,14 @@
                             </div>
                             <a href="stats.xhtml" style="display: block">
                                 STATISTICHE
+                            </a>
+                        </li>
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                ESCI
+                            </div>
+                            <a href="quit.xhtml" style="display: block">
+                                ESCI
                             </a>
                         </li>
                     </ul>
@@ -93,7 +104,7 @@
                                 <p:column headerText="COMUNE" field="comune.comune" filterMatchMode="exact" width="240">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter();" styleClass="custom-filter">
-                                            <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="- TUTTI -" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItems value="#{istruttorieController.comuni}" var="comune" itemValue="#{comune.comune}" itemLabel="#{comune.comune}" />
                                         </p:selectOneMenu>
                                     </f:facet>
@@ -104,7 +115,7 @@
                                 <p:column headerText="STATO" filterMatchMode="exact" field="stato.stato" width="140">                                    
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
-                                            <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="- TUTTI -" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItems value="#{istruttorieController.statiLavoro}" var="sl" itemValue="#{sl.stato}" itemLabel="#{sl.stato}" />
                                         </p:selectOneMenu>
                                     </f:facet>
@@ -142,7 +153,7 @@
                                 <p:column headerText="ESITO ISTRUTTORIA" filterable="true" filterMatchMode="contains" field="esito.esito" width="200">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
-                                            <f:selectItem itemLabel="Tutti" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="- TUTTI -" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItem itemLabel="Ammesso istr." itemValue="Ammesso istr." />
                                             <f:selectItems value="#{istruttorieController.esiti}" var="esito" itemValue="#{esito.esito}" itemLabel="#{esito.esito}" />
                                         </p:selectOneMenu>

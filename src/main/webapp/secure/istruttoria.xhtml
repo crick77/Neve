@@ -8,7 +8,7 @@
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PrimeFlex</title>
+        <title>USR NEVE - Istruttoria</title>
         <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
         <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
         <link rel="stylesheet" href="../css/styles.css" />
@@ -28,8 +28,11 @@
                         <img src="../images/logomain.png" alt="prime" id="mobile-logo" />                    
                     </div>
                     <div class="layout-topbar-left">
-                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />
-                    </div>
+                        <div>
+                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
+                        </div>
+                        <ul class="topbar-menu"><li><span class="pi pi-user" /> Benvenuto, <i>#{utente.username}!</i><h:outputText rendered="#{utente.admin}" value=" - Amministratore" /></li></ul>
+                    </div> 
                 </div>
             </header>
             <main>
@@ -59,6 +62,14 @@
                             </div>
                             <a href="stats.xhtml" style="display: block">
                                 STATISTICHE
+                            </a>
+                        </li>
+                         <li>  
+                            <div class="menuitem-root-text mt-3">
+                                ESCI
+                            </div>
+                            <a href="quit.xhtml" style="display: block">
+                                ESCI
                             </a>
                         </li>
                     </ul>
@@ -133,12 +144,13 @@
                                     <label for="extdoc">DOCUMENTO ESISTENTE</label><br/>
                                     <div class="p-col-2">
                                         <p:commandButton id="extdoc" value="#{istruttoriaController.istruttoria.documento}" styleClass="rounded-button ui-button-raised ui-button-help" icon="pi pi-trash" action="#{istruttoriaController.rimuoviDocumento()}" update="@form"/>
+                                        <p:tooltip for="extdoc" value="Clicca per rimuovere il documento" position="right" />
                                     </div>
                                 </div>
                             </ui:fragment> 
                             <div class="p-field">                               
                                 <label for="documento">NUOVO DOCUMENTO</label><br/>
-                                <p:fileUpload id="documento" label="Cambia documento" value="#{istruttoriaController.documento}" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
+                                <p:fileUpload id="documento" label="Carica Documento" value="#{istruttoriaController.documento}" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
                             </div>   
                             <ui:fragment rendered="#{istruttoriaController.idIstruttoria!=null and not empty istruttoriaController.istruttoria.allegatoList}" id="allegatoList">
                                 <div class="p-field">
@@ -146,14 +158,15 @@
                                     <ui:repeat value="#{istruttoriaController.istruttoria.allegatoList}" var="allegato">                                                                            
                                         <div class="p-col-3">
                                             <p:commandButton id="extall" value="#{allegato.allegato}" styleClass="rounded-button ui-button-raised ui-button-warning" icon="pi pi-trash" action="#{istruttoriaController.rimuoviAllegato(allegato)}" update="@form"/>
-                                        </div>
+                                            <p:tooltip for="extall" value="Clicca per rimuovere l'allegato" position="right" />
+                                        </div>                                        
                                     </ui:repeat>
 
                                 </div>
                             </ui:fragment> 
                             <div class="p-field">                               
                                 <label for="allegati">NUOVI ALLEGATI</label><br/>
-                                <p:fileUpload id="allegati" label="Seleziona" value="#{istruttoriaController.allegati}" multiple="true" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
+                                <p:fileUpload id="allegati" label="Carica Allegato" value="#{istruttoriaController.allegati}" multiple="true" mode="simple" sizeLimit="10000000" allowTypes="/(\.|\/)(pdf|doc|docx)$/" skinSimple="true" invalidFileMessage="File non valido" invalidSizeMessage="Dimensione file errata (Max 10 MB)"/>                                
                             </div>
                             <div class="p-field p-grid">     
                                 <div class="p-col-3">

@@ -7,7 +7,7 @@
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PrimeFlex</title>
+        <title>USR NEVE - Statistiche</title>
         <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
         <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
         <link rel="stylesheet" href="../css/styles.css" />
@@ -26,8 +26,11 @@
                         <img src="../images/logomain.png" alt="prime" id="mobile-logo" />                    
                     </div>
                     <div class="layout-topbar-left">
-                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />
-                    </div>
+                        <div>
+                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
+                        </div>
+                        <ul class="topbar-menu"><li><span class="pi pi-user" /> Benvenuto, <i>#{utente.username}!</i><h:outputText rendered="#{utente.admin}" value=" - Amministratore" /></li></ul>
+                    </div> 
                 </div>
             </header>
             <main>
@@ -55,6 +58,14 @@
                             </div>
                             <a href="stats.xhtml" style="display: block">
                                 STATISTICHE
+                            </a>
+                        </li>
+                         <li>  
+                            <div class="menuitem-root-text mt-3">
+                                ESCI
+                            </div>
+                            <a href="quit.xhtml" style="display: block">
+                                ESCI
                             </a>
                         </li>
                     </ul>
