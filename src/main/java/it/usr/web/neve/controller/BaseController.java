@@ -107,4 +107,8 @@ public abstract class BaseController implements Serializable {
         }
         return null;
     }
+    
+    public String sanitizePath(String s) {
+        return (s!=null) ? s.replaceAll("[\\/|\\\\|\\?|\\<|\\>|\\*|\\:|\\|]+", "_") : null;
+    }
 }

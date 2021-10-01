@@ -68,7 +68,8 @@ public class Istruttoria implements Serializable {
     private String nome;
     @Basic(optional = false)
     @NotNull
-    private int idpratica;
+    @Size(min = 1, max = 32)
+    private String idpratica;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -124,7 +125,7 @@ public class Istruttoria implements Serializable {
         this.id = id;
     }
 
-    public Istruttoria(Integer id, String cognome, String nome, int idpratica, String oggettolavori, BigDecimal importolavori, BigDecimal ivalavori, BigDecimal spesetecniche, BigDecimal stperizia, BigDecimal ivastperizia, BigDecimal totale, String documento, int version) {
+    public Istruttoria(Integer id, String cognome, String nome, String idpratica, String oggettolavori, BigDecimal importolavori, BigDecimal ivalavori, BigDecimal spesetecniche, BigDecimal stperizia, BigDecimal ivastperizia, BigDecimal totale, String documento, int version) {
         this.id = id;
         this.cognome = cognome;
         this.nome = nome;
@@ -164,11 +165,11 @@ public class Istruttoria implements Serializable {
         this.nome = nome;
     }
 
-    public int getIdpratica() {
+    public String getIdpratica() {
         return idpratica;
     }
 
-    public void setIdpratica(int idpratica) {
+    public void setIdpratica(String idpratica) {
         this.idpratica = idpratica;
     }
 

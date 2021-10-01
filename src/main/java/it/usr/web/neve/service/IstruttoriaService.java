@@ -65,7 +65,7 @@ public class IstruttoriaService {
         }
     }
     
-    public boolean isPraticaValida(int idPratica, Integer id) {
+    public boolean isPraticaValida(String idPratica, Integer id) {
         // Nuova pratica?
         if(id==null) {
             // Non devono essercene altre
@@ -76,7 +76,7 @@ public class IstruttoriaService {
             // Modifica, recupera la precedente versione
             Istruttoria i = em.find(Istruttoria.class, id);
             // Se la pratica è cambiata
-            if(i.getIdpratica()!=idPratica) {
+            if(!i.getIdpratica().equalsIgnoreCase(idPratica)) {
                 // Il nuovo numero è già stato usato?
                 List<Istruttoria> lIstr = em.createNamedQuery("Istruttoria.findByIdpraticaOtherID").setParameter("idpratica", idPratica).setParameter("id", id).getResultList();
                 return lIstr.isEmpty();

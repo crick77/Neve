@@ -64,7 +64,7 @@
                                 STATISTICHE
                             </a>
                         </li>
-                         <li>  
+                        <li>  
                             <div class="menuitem-root-text mt-3">
                                 ESCI
                             </div>
@@ -94,9 +94,9 @@
                             </div>
                             <div class="p-field">
                                 <label for="pratica"># PRATICA</label>
-                                <p:inputNumber id="pratica" value="#{istruttoriaController.istruttoria.idpratica}" required="true" requiredMessage="N. pratica obbligatorio" minValue="1">
+                                <p:inputText id="pratica" value="#{istruttoriaController.istruttoria.idpratica}" required="true" requiredMessage="N. pratica obbligatorio" maxlength="32">
                                     <p:ajax event="blur" listener="#{istruttoriaController.validaIdPratica}" update="pratica,messages" />
-                                </p:inputNumber>
+                                </p:inputText>
                             </div>
                             <div class="p-field">
                                 <label for="oggettolavori">OGGETTO LAVORI</label>

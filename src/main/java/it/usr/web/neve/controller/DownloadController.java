@@ -33,7 +33,7 @@ import org.slf4j.Logger;
  */
 @Named
 @RequestScoped
-public class DownloadController {
+public class DownloadController extends BaseController {
     @Inject
     IstruttoriaService is;
     @Inject
@@ -85,7 +85,7 @@ public class DownloadController {
     public void prepare(Allegato a) {
         String _file = null;
         try {
-            Path p = Paths.get(basePath + a.getIstruttoria().getIdpratica() + "/att/" + a.getAllegato());
+            Path p = Paths.get(basePath + sanitizePath(a.getIstruttoria().getIdpratica()) + "/att/" + a.getAllegato());
             _file = p.toString();
 
             InputStream _is = Files.newInputStream(p);

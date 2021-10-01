@@ -164,7 +164,7 @@ public class IstruttoriaController extends BaseController {
                 _totale = _totale.add(istruttoria.getStperizia());
                 _totale = _totale.add(istruttoria.getIvastperizia());
                 istruttoria.setTotale(_totale);
-                Utente u = (Utente) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+                Utente u = getUtente();
                 istruttoria.setProprietario(u);
 
                 is.salva(istruttoria);
@@ -214,17 +214,17 @@ public class IstruttoriaController extends BaseController {
     private boolean salvaDocumentoAllegati() {
         try {
             if (documento.getFileName() != null) {
-                Files.createDirectories(Paths.get(basePath + istruttoria.getIdpratica() + "/"));
+                Files.createDirectories(Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/"));
                 Files.write(Paths.get(basePath + istruttoria.getIdpratica() + "/" + documento.getFileName()), documento.getContent());
                 documento.delete();
                 istruttoria.setDocumento(documento.getFileName());
             }
 
             if (allegati.getSize() > 0) {
-                Files.createDirectories(Paths.get(basePath + istruttoria.getIdpratica() + "/att/"));
+                Files.createDirectories(Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/att/"));
 
                 for (UploadedFile all : allegati.getFiles()) {
-                    Files.write(Paths.get(basePath + istruttoria.getIdpratica() + "/att/" + all.getFileName()), all.getContent());
+                    Files.write(Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/att/" + all.getFileName()), all.getContent());
                     all.delete();
 
                     Allegato a = new Allegato();
