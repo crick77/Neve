@@ -66,7 +66,7 @@ public class DownloadController extends BaseController {
     public void prepare(Istruttoria i) {
         String _file = null;
         try {
-            Path p = Paths.get(basePath + i.getIdpratica() + "/" + i.getDocumento());
+            Path p = Paths.get(basePath + sanitizePath(i.getIdpratica()) + "/" + i.getDocumento());
             _file = p.toString();
             
             InputStream _is = Files.newInputStream(p);

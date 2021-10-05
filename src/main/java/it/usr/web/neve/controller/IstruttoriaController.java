@@ -16,7 +16,9 @@ import it.usr.web.neve.service.IstruttoriaService;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -56,6 +58,7 @@ public class IstruttoriaController extends BaseController {
     private List<Esito> esiti;
     private List<Comune> comuni;
     private List<String> filesToBeRemoved;
+    private String oldIdPratica;
 
     @PostConstruct
     public void setup() {
@@ -66,7 +69,7 @@ public class IstruttoriaController extends BaseController {
         if (!basePath.endsWith("/")) {
             basePath += "/";
         }
-        
+                
         logger.info("Cartella di upload/download impostata su [{}].", basePath);
     }
 
@@ -79,12 +82,15 @@ public class IstruttoriaController extends BaseController {
             if (!(istruttoria.getProprietario().getUsername().equals(utente.getUsername()) || utente.getAdmin()) && !utente.getAbilitato()) {
                 return redirect("unauth");
             }
+            oldIdPratica = istruttoria.getIdpratica();
         } else {
             istruttoria = new Istruttoria();
             istruttoria.setComune(new Comune());
             istruttoria.setStato(new Statolavori());
             istruttoria.setEsito(new Esito());
             istruttoria.setAllegatoList(new ArrayList<>());
+            
+            oldIdPratica = null;
         }
 
         statilavoro = is.getStatiLavoro();
@@ -169,16 +175,21 @@ public class IstruttoriaController extends BaseController {
 
                 is.salva(istruttoria);
             }
-        } else {
+        } else {  
             // modifica
-
+            // Istruttoria di proprietà o amministratore
+            Utente u = getUtente();
+            if(!u.getUsername().equalsIgnoreCase(istruttoria.getProprietario().getUsername()) && !u.getAdmin()) {
+                return "unauth";
+            }
+        
             // rimosso documento e nessuno aggiunto?
             if (istruttoria.getDocumento() == null && documento.getFileName() == null) {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
                 FacesContext.getCurrentInstance().addMessage("documento", message);
                 return SAME_VIEW;
-            }
-
+            } 
+            
             if (salvaDocumentoAllegati()) {
                 istruttoria.setComune(is.getComune(istruttoria.getComune().getComune()));
                 istruttoria.setEsito(is.getEsito(istruttoria.getEsito().getEsito()));
@@ -213,9 +224,16 @@ public class IstruttoriaController extends BaseController {
 
     private boolean salvaDocumentoAllegati() {
         try {
+            // L'id istruttoria è cambiato? Rinomina la cartella prima di fare il resto
+            if(!istruttoria.getIdpratica().equalsIgnoreCase(oldIdPratica) && oldIdPratica!=null) {
+                Path pSrc = Paths.get(basePath + sanitizePath(oldIdPratica) + "/");
+                Path pDest = Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/");
+                Files.move(pSrc, pDest, StandardCopyOption.ATOMIC_MOVE);
+            }
+            
             if (documento.getFileName() != null) {
                 Files.createDirectories(Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/"));
-                Files.write(Paths.get(basePath + istruttoria.getIdpratica() + "/" + documento.getFileName()), documento.getContent());
+                Files.write(Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/" + documento.getFileName()), documento.getContent());
                 documento.delete();
                 istruttoria.setDocumento(documento.getFileName());
             }
