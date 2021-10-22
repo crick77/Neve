@@ -116,5 +116,5 @@ public class IstruttorieController extends BaseController {
         Document pdf = (Document)document;        
 	pdf.add(new Paragraph(filteredIstruttorie.size()+" pratiche per un totale di "+decimalFormat(totale, "#,##0.00")+" €."));
     }
-}
+} 
  

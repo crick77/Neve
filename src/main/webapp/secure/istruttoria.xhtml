@@ -129,6 +129,13 @@
                                 <p:inputNumber id="ivastperizia" value="#{istruttoriaController.istruttoria.ivastperizia}" required="true" requiredMessage="IVA S.T. perizia obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="." thousandSeparator="," decimalPlaces="2" minValue="0" emptyValue="0" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
                             </div>
                             <div class="p-field">
+                                <label for="esito">TIPOLOGIA</label>
+                                <p:selectOneMenu id="tipologia" value="#{istruttoriaController.istruttoria.tipologia}">
+                                    <f:selectItem itemLabel="PRIVATA" itemValue="PRIVATA" />
+                                    <f:selectItem itemLabel="PRODUTTIVA" itemValue="PRODUTTIVA" />   
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
                                 <label for="esito">ESITO</label>
                                 <p:selectOneMenu id="esito" value="#{istruttoriaController.istruttoria.esito.esito}">
                                     <f:selectItems value="#{istruttoriaController.esiti}" var="es" itemValue="#{es.esito}" itemLabel="#{es.esito}" />

@@ -16,9 +16,9 @@ import javax.faces.context.FacesContext;
  * @author riccardo.iovenitti
  */
 public abstract class BaseController implements Serializable {
-
     public final static long serialVersionUID = 1L;
     public final static String SAME_VIEW = null;
+    public final static String CURRENCY_PATTERN = "#,##0.00 €";
 
     public Map<String, Object> getSessionMap() {
         return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();

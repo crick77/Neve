@@ -7,6 +7,7 @@ package it.usr.web.neve.controller;
 
 import it.usr.web.neve.model.Stat;
 import it.usr.web.neve.service.StatisticheService;
+import java.awt.Color;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +41,20 @@ public class StatisticheController extends BaseController {
     private PolarAreaChartModel comunePraticheChart;
     private HorizontalBarChartModel comuneTotaleChart;
     private PieChartModel esitoChart;
+    private PieChartModel tipologiaChart;
     private BarChartModel statoChart;
     final private Random random = new Random();
     private List<Number> valuesPratiche;
     private List<Number> valuesTotale;
     private List<Number> valuesEsito;
     private List<Number> valuesStato;
+    private List<Number> valuesTipologia;
     private List<String> bgColors;
     private List<String> bgColorsAlfa;
     private List<String> labels;
     private BigDecimal totaleRichiesta;
     private int totalePratiche;
+    public final static float ALPHA = 0.2f;
     
     public void initialize() { 
         totalePratiche = 0;
@@ -58,11 +62,13 @@ public class StatisticheController extends BaseController {
         List<Stat> lStatCom = ss.getStatistichePerComune();
         List<Stat> lStatEsito = ss.getStatistichePerEsito();
         List<Stat> lStatStato = ss.getStatistichePerStato();
+        List<Stat> lStatTipologia = ss.getStatistichePerTipologia();
                                       
         valuesPratiche = new ArrayList<>();
         valuesTotale = new ArrayList<>();
         valuesEsito = new ArrayList<>();
         valuesStato = new ArrayList<>();
+        valuesTipologia = new ArrayList<>();
         bgColors = new ArrayList<>();
         bgColorsAlfa = new ArrayList<>();
         labels = new ArrayList<>();        
@@ -73,15 +79,13 @@ public class StatisticheController extends BaseController {
             valuesTotale.add(com.getTotale());
             totaleRichiesta = totaleRichiesta.add(com.getTotale());
             
-            int r = random.nextInt(256);
-            int g = random.nextInt(256);
-            int b = random.nextInt(256);
-            bgColors.add("rgb("+r+", "+g+", "+b+")");
-            bgColorsAlfa.add("rgb("+r+", "+g+", "+b+", 0.2)");
+            Color c = colorGen(255, 255, 255);
+            bgColors.add(colorToString(c));
+            bgColorsAlfa.add(colorToString(c, ALPHA));
             
-            labels.add(com.getVoce());
+            labels.add(com.getVoce()+" per "+decimalFormat(com.getTotale(), CURRENCY_PATTERN));
         });        
-            
+             
         creaNumeroPraticheComuneChart();
         creaTotaleComuneChart();                                                                      
         
@@ -91,13 +95,11 @@ public class StatisticheController extends BaseController {
         lStatEsito.forEach(com -> {
             valuesEsito.add(com.getNumeroPratiche()); 
             
-            int r = random.nextInt(256);
-            int g = random.nextInt(256);
-            int b = random.nextInt(256);
-            bgColors.add("rgb("+r+", "+g+", "+b+")");
-            bgColorsAlfa.add("rgb("+r+", "+g+", "+b+", 0.2)");
+            Color c = colorGen(255, 255, 128);
+            bgColors.add(colorToString(c));
+            bgColorsAlfa.add(colorToString(c, ALPHA));
             
-            labels.add(com.getVoce());
+            labels.add(com.getVoce()+" per "+decimalFormat(com.getTotale(), CURRENCY_PATTERN));
         });
                 
         creaEsitoChart();
@@ -108,16 +110,29 @@ public class StatisticheController extends BaseController {
         lStatStato.forEach(com -> {
             valuesStato.add(com.getNumeroPratiche()); 
             
-            int r = random.nextInt(256);
-            int g = random.nextInt(256);
-            int b = random.nextInt(256);
-            bgColors.add("rgb("+r+", "+g+", "+b+")");
-            bgColorsAlfa.add("rgb("+r+", "+g+", "+b+", 0.2)");
+            Color c = colorGen(255, 128, 255);
+            bgColors.add(colorToString(c));
+            bgColorsAlfa.add(colorToString(c, ALPHA));
             
-            labels.add(com.getVoce());
+            labels.add(com.getVoce()+" per "+decimalFormat(com.getTotale(), CURRENCY_PATTERN));
         });
         
         creaStatoChart();
+        
+        bgColors = new ArrayList<>();
+        bgColorsAlfa = new ArrayList<>();
+        labels = new ArrayList<>();
+        lStatTipologia.forEach(tip -> {
+            valuesTipologia.add(tip.getNumeroPratiche()); 
+            
+            Color c = colorGen(128, 255, 128);
+            bgColors.add(colorToString(c));
+            bgColorsAlfa.add(colorToString(c, ALPHA));
+            
+            labels.add(tip.getVoce()+" per "+decimalFormat(tip.getTotale(), CURRENCY_PATTERN));
+        });
+        
+        createTipologiaChart();
     }
     
     public PolarAreaChartModel getComunePraticheChart() {
@@ -135,7 +150,11 @@ public class StatisticheController extends BaseController {
     public BarChartModel getStatoChart() {
         return statoChart;
     }
-                
+
+    public PieChartModel getTipologiaChart() {
+        return tipologiaChart;
+    }
+                    
     private void creaNumeroPraticheComuneChart() {
         comunePraticheChart = new PolarAreaChartModel();
         ChartData data = new ChartData();
@@ -149,7 +168,7 @@ public class StatisticheController extends BaseController {
         PolarAreaChartOptions options = new PolarAreaChartOptions();
         Title title = new Title();
         title.setDisplay(true);
-        title.setText("Pratiche per Comune ("+totalePratiche+")");
+        title.setText("Pratiche per Comune (# pratiche: "+totalePratiche+")");
         title.setFontSize(16);
         options.setTitle(title);  
         
@@ -161,7 +180,7 @@ public class StatisticheController extends BaseController {
         comuneTotaleChart = new HorizontalBarChartModel();
         ChartData data = new ChartData();
         HorizontalBarChartDataSet dataSet = new HorizontalBarChartDataSet();
-        dataSet.setLabel("Totale richiesto: "+decimalFormat(totaleRichiesta, "#,##0.00 €"));        
+        dataSet.setLabel("Totale richiesto: "+decimalFormat(totaleRichiesta, CURRENCY_PATTERN));        
         
         dataSet.setBackgroundColor(bgColorsAlfa);
         dataSet.setBorderColor(bgColors);
@@ -195,7 +214,7 @@ public class StatisticheController extends BaseController {
         PieChartOptions options = new PieChartOptions();
         Title title = new Title();
         title.setDisplay(true);
-        title.setText("Pratiche per Esito ("+totalePratiche+")");
+        title.setText("Pratiche per Esito (# pratiche: "+totalePratiche+")");
         title.setFontSize(16);
         options.setTitle(title);
         
@@ -217,11 +236,54 @@ public class StatisticheController extends BaseController {
         BarChartOptions options = new BarChartOptions();
         Title title = new Title();
         title.setDisplay(true);
-        title.setText("Pratiche per Stato ("+totalePratiche+")");
+        title.setText("Pratiche per Stato (# pratiche: "+totalePratiche+")");
         title.setFontSize(16);
         options.setTitle(title);
         
         statoChart.setData(data);
         statoChart.setOptions(options);
+    }
+
+    private void createTipologiaChart() {
+        tipologiaChart = new PieChartModel();
+        ChartData data = new ChartData();
+
+        PieChartDataSet dataSet = new PieChartDataSet();        
+        dataSet.setData(valuesTipologia);        
+        dataSet.setBackgroundColor(bgColors);
+        data.addChartDataSet(dataSet);        
+        data.setLabels(labels);
+
+        PieChartOptions options = new PieChartOptions();
+        Title title = new Title();
+        title.setDisplay(true);
+        title.setText("Pratiche per Tipologia (# pratiche: "+totalePratiche+")");
+        title.setFontSize(16);
+        options.setTitle(title);
+        
+        tipologiaChart.setData(data);
+        tipologiaChart.setOptions(options);
+    }
+    
+    private Color colorGen(int r, int g, int b) {       
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+
+        // mix the color        
+        red = (red + r) / 2;
+        green = (green + g) / 2;
+        blue = (blue + b) / 2;        
+        
+        return new Color(red, green, blue);
+    }
+    
+    private String colorToString(Color color, Float... alpha) {
+        if(alpha.length > 0) {
+            return "rgb("+color.getRed()+", "+color.getGreen()+", "+color.getBlue()+", "+alpha[0]+")";
+        }
+        else {
+            return "rgb("+color.getRed()+", "+color.getGreen()+", "+color.getBlue()+")";
+        }
     }
 }

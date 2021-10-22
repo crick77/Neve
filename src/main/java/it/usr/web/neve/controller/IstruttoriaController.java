@@ -153,11 +153,11 @@ public class IstruttoriaController extends BaseController {
 
         // Nuova
         if (istruttoria.getId() == null) {
-            if (documento == null || documento.getFileName() == null) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
-                FacesContext.getCurrentInstance().addMessage("documento", message);
-                return SAME_VIEW;
-            }
+            //if (documento == null || documento.getFileName() == null) {
+            //    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
+            //    FacesContext.getCurrentInstance().addMessage("documento", message);
+            //    return SAME_VIEW;
+            //}
 
             if (salvaDocumentoAllegati()) {
                 istruttoria.setComune(is.getComune(istruttoria.getComune().getComune()));
@@ -184,11 +184,11 @@ public class IstruttoriaController extends BaseController {
             }
         
             // rimosso documento e nessuno aggiunto?
-            if (istruttoria.getDocumento() == null && documento.getFileName() == null) {
-                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
-                FacesContext.getCurrentInstance().addMessage("documento", message);
-                return SAME_VIEW;
-            } 
+            //if (istruttoria.getDocumento() == null && documento.getFileName() == null) {
+            //    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Errore", "Documento obbligatorio");
+            //    FacesContext.getCurrentInstance().addMessage("documento", message);
+            //    return SAME_VIEW;
+            //} 
             
             if (salvaDocumentoAllegati()) {
                 istruttoria.setComune(is.getComune(istruttoria.getComune().getComune()));

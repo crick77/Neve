@@ -149,7 +149,16 @@
                                     <h:outputText value="#{istruttoria.totale}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
-                                </p:column>                 
+                                </p:column> 
+                                <p:column headerText="TIPOLOGIA" field="tipologia" sortable="true" filterable="true" style="text-align: right" width="150">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
+                                            <f:selectItem itemLabel="- TUTTE -" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="PRIVATA" itemValue="PRIVATA" />
+                                            <f:selectItem itemLabel="PRODUTTIVA" itemValue="PRODUTTIVA" />                                            
+                                        </p:selectOneMenu>
+                                    </f:facet>                                                                         
+                                </p:column>                                 
                                 <p:column headerText="ESITO ISTRUTTORIA" filterable="true" filterMatchMode="contains" field="esito.esito" width="200">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
@@ -161,7 +170,7 @@
                                 </p:column>   
 
                                 <p:column width="40" exportable="false">
-                                    <p:commandButton id="doc" icon="pi pi-file-pdf" styleClass="rounded-button ui-button-raised ui-button-help" actionListener="#{downloadController.prepare(istruttoria)}" ajax="false">
+                                    <p:commandButton id="doc" icon="pi pi-file-pdf" styleClass="rounded-button ui-button-raised ui-button-help" actionListener="#{downloadController.prepare(istruttoria)}" ajax="false" rendered="#{not empty istruttoria.documento}">
                                         <p:fileDownload value="#{downloadController.file}" />
                                     </p:commandButton>
                                     <p:tooltip for="doc" value="Documento" position="top" />

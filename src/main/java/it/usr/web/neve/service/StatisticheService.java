@@ -20,7 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * 
  * @author riccardo.iovenitti
  */
 @Stateless
@@ -78,6 +78,24 @@ public class StatisticheService {
             }
             
             stat.add(new Stat(statoLav.getStato(), numeroPratiche, totale));
+        });
+        
+        return stat;
+    }
+    
+    public List<Stat> getStatistichePerTipologia() {
+        List<Stat> stat = new ArrayList<>();
+        
+        List<String> lTipologie = em.createQuery("SELECT DISTINCT i.tipologia FROM Istruttoria i", String.class).getResultList();
+        lTipologie.forEach(tipologia -> {
+            List<Istruttoria> lIst = em.createNamedQuery("Istruttoria.findByTipologia").setParameter("tipologia", tipologia).getResultList();
+            int numeroPratiche = lIst.size();
+            BigDecimal totale = new BigDecimal(0);
+            for(Istruttoria ist : lIst) {
+                totale = totale.add(ist.getTotale());
+            }
+            
+            stat.add(new Stat(tipologia, numeroPratiche, totale));
         });
         
         return stat;

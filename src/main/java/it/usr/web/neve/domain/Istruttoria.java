@@ -49,6 +49,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Istruttoria.findByStperizia", query = "SELECT i FROM Istruttoria i WHERE i.stperizia = :stperizia"),
     @NamedQuery(name = "Istruttoria.findByIvastperizia", query = "SELECT i FROM Istruttoria i WHERE i.ivastperizia = :ivastperizia"),
     @NamedQuery(name = "Istruttoria.findByTotale", query = "SELECT i FROM Istruttoria i WHERE i.totale = :totale"),
+    @NamedQuery(name = "Istruttoria.findByTipologia", query = "SELECT i FROM Istruttoria i WHERE i.tipologia = :tipologia"),
     @NamedQuery(name = "Istruttoria.findByNote", query = "SELECT i FROM Istruttoria i WHERE i.note = :note"),
     @NamedQuery(name = "Istruttoria.findByDocumento", query = "SELECT i FROM Istruttoria i WHERE i.documento = :documento")})  
 public class Istruttoria implements Serializable {
@@ -93,11 +94,13 @@ public class Istruttoria implements Serializable {
     @Basic(optional = false)
     @NotNull
     private BigDecimal totale;
-    @Size(max = 2000)
-    private String note;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 20)
+    private String tipologia;
+    @Size(max = 2000)    
+    private String note;
+    @Basic(optional = true)    
+    @Size(max = 255)
     private String documento;
     @Basic(optional = false)
     @NotNull
@@ -125,7 +128,7 @@ public class Istruttoria implements Serializable {
         this.id = id;
     }
 
-    public Istruttoria(Integer id, String cognome, String nome, String idpratica, String oggettolavori, BigDecimal importolavori, BigDecimal ivalavori, BigDecimal spesetecniche, BigDecimal stperizia, BigDecimal ivastperizia, BigDecimal totale, String documento, int version) {
+    public Istruttoria(Integer id, String cognome, String nome, String idpratica, String oggettolavori, BigDecimal importolavori, BigDecimal ivalavori, BigDecimal spesetecniche, BigDecimal stperizia, BigDecimal ivastperizia, BigDecimal totale, String tipologia, int version) {
         this.id = id;
         this.cognome = cognome;
         this.nome = nome;
@@ -137,7 +140,7 @@ public class Istruttoria implements Serializable {
         this.stperizia = stperizia;
         this.ivastperizia = ivastperizia;
         this.totale = totale;
-        this.documento = documento;
+        this.tipologia = tipologia;
         this.version = version;
     }
 
@@ -229,6 +232,14 @@ public class Istruttoria implements Serializable {
         this.totale = totale;
     }
 
+    public String getTipologia() {
+        return tipologia;
+    }
+
+    public void setTipologia(String tipologia) {
+        this.tipologia = tipologia;
+    }
+        
     public String getNote() {
         return note;
     }
@@ -317,6 +328,5 @@ public class Istruttoria implements Serializable {
     @Override
     public String toString() {
         return "it.usr.web.neve.domain.Istruttoria[ id=" + id + " ]";
-    }
-    
+    }    
 }
