@@ -182,8 +182,8 @@
                                 </p:column>
 
                                 <p:column width="40" exportable="false">
-                                    <p:commandButton id="delete" icon="pi pi-trash" rendered="#{utente.admin}" styleClass="rounded-button ui-button-raised ui-button-danger" action="#{istruttorieController.elimina(istruttoria)}" update="@form" onclick="PF('istruttoriaTable').clearFilters();">
-                                        <p:confirm type="popup" header="Conferma" message="Eliminare la pratica? L'operazione è irreversibile." icon="pi pi-exclamation-triangle"/>
+                                    <p:commandButton id="delete" icon="pi pi-trash" rendered="#{utente.admin}" styleClass="rounded-button ui-button-raised ui-button-danger" action="#{istruttorieController.elimina(istruttoria)}" update="dtIstruttorie" onclick="PF('istruttoriaTable').clearFilters();">
+                                        <p:confirm type="popup" header="Conferma" message="Eliminare la pratica? L'operazione è irreversibile." icon="pi pi-exclamation-triangle" />
                                     </p:commandButton>
                                     <p:tooltip for="delete" value="Elimina" position="top" rendered="#{utente.admin}"/>
                                 </p:column>
