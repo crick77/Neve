@@ -31,7 +31,10 @@ public class AuthService {
             ctx.close();
             
             Utente u = em.find(Utente.class, username);
-            return u.getAbilitato() ? u : null;
+            if(u!=null) {
+                return u.getAbilitato() ? u : null;
+            }
+            return null;
         }
         catch(NamingException ne) {
             return null;

@@ -37,8 +37,8 @@ public class AuthController extends BaseController {
             return redirect("/secure/istruttorie");
         }
         else {
-            logger.debug("L'utente [{}] non esiste o la password è errata.", username);
-            message = "Username e/o password errati.";
+            logger.debug("L'utente [{}] non esiste o la password è errata o l'utente non abilitato.", username);
+            message = "Credenziali di accesso errate o utente non abilitato.";
             return SAME_VIEW;
         }
     }

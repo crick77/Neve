@@ -2,23 +2,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>USR NEVE - Istruttoria - Pagina non trovata</title>
-        <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
-        <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
-        <link rel="stylesheet" href="../css/styles.css" />
-        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
-
-        <f:metadata>
-            <f:viewAction action="#{statisticheController.initialize()}" />
-        </f:metadata>
-    </h:head>
-    <h:body>
-        <h:form enctype="multipart/form-data" id="mainform">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view transient="true">
+        <h:head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>USR NEVE - Istruttoria - Pagina non trovata</title>
+            <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
+            <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
+            <link rel="stylesheet" href="../css/styles.css" />
+            <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />        
+        </h:head>
+        <h:body>
             <header>
                 <div class="layout-topbar flex align-items-center justify-content-between">
                     <div class="mobile-menu-wrapper">
@@ -80,6 +75,6 @@
 
                 <div id="layout-mask" class="layout-mask"></div>
             </main>
-        </h:form>
-    </h:body>    
+            </h:form>
+    </f:view>
 </html>
