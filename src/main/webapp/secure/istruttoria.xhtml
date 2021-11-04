@@ -110,23 +110,23 @@
                             </div>
                             <div class="p-field">
                                 <label for="importolavori">IMPORTO LAVORI</label>
-                                <p:inputNumber id="importolavori" value="#{istruttoriaController.istruttoria.importolavori}" required="true" requiredMessage="Importo lavori obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="." thousandSeparator="," decimalPlaces="2" minValue="0" emptyValue="0" onfocus="this.setSelectionRange(0, this.value.length - 2)" />
+                                <p:inputNumber id="importolavori" value="#{istruttoriaController.istruttoria.importolavori}" required="true" requiredMessage="Importo lavori obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="," decimalSeparatorAlternative="." thousandSeparator="." decimalPlaces="2" minValue="0" emptyValue="0" modifyValueOnWheel="false" onfocus="this.setSelectionRange(0, this.value.length - 2)" />
                             </div>
                             <div class="p-field">
                                 <label for="ivalavori">IVA LAVORI</label>
-                                <p:inputNumber id="ivalavori" value="#{istruttoriaController.istruttoria.ivalavori}" required="true" requiredMessage="IVA lavori obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="." thousandSeparator="," decimalPlaces="2" minValue="0" emptyValue="0" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
+                                <p:inputNumber id="ivalavori" value="#{istruttoriaController.istruttoria.ivalavori}" required="true" requiredMessage="IVA lavori obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="," decimalSeparatorAlternative="." thousandSeparator="." decimalPlaces="2" minValue="0" emptyValue="0" modifyValueOnWheel="false" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
                             </div>
                             <div class="p-field">
                                 <label for="spesetecniche">SPESE TECNICHE</label>
-                                <p:inputNumber id="spesetecniche" value="#{istruttoriaController.istruttoria.spesetecniche}" required="true" requiredMessage="Spese tecniche obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="." thousandSeparator="," decimalPlaces="2" minValue="0" emptyValue="0" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
+                                <p:inputNumber id="spesetecniche" value="#{istruttoriaController.istruttoria.spesetecniche}" required="true" requiredMessage="Spese tecniche obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="," decimalSeparatorAlternative="." thousandSeparator="." decimalPlaces="2" minValue="0" emptyValue="0" modifyValueOnWheel="false" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
                             </div>
                             <div class="p-field">
                                 <label for="stperizia">SPESE TECNICHE PERIZIA</label>
-                                <p:inputNumber id="stperizia" value="#{istruttoriaController.istruttoria.stperizia}" required="true" requiredMessage="S.T. perizia obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="." thousandSeparator="," decimalPlaces="2" minValue="0" emptyValue="0" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
+                                <p:inputNumber id="stperizia" value="#{istruttoriaController.istruttoria.stperizia}" required="true" requiredMessage="S.T. perizia obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="," decimalSeparatorAlternative="." thousandSeparator="." decimalPlaces="2" minValue="0" emptyValue="0" modifyValueOnWheel="false" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
                             </div>
                             <div class="p-field">
                                 <label for="ivastperizia">IVA S.T. PERIZIA</label>
-                                <p:inputNumber id="ivastperizia" value="#{istruttoriaController.istruttoria.ivastperizia}" required="true" requiredMessage="IVA S.T. perizia obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="." thousandSeparator="," decimalPlaces="2" minValue="0" emptyValue="0" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
+                                <p:inputNumber id="ivastperizia" value="#{istruttoriaController.istruttoria.ivastperizia}" required="true" requiredMessage="IVA S.T. perizia obbligatorio" symbol=" €" symbolPosition="s" decimalSeparator="," decimalSeparatorAlternative="." thousandSeparator="." decimalPlaces="2" minValue="0" emptyValue="0" modifyValueOnWheel="false" onfocus="this.setSelectionRange(0, this.value.length - 2)"/>
                             </div>
                             <div class="p-field">
                                 <label for="esito">TIPOLOGIA</label>
@@ -193,6 +193,6 @@
 
                 <div id="layout-mask" class="layout-mask"></div>
             </main>
-        </h:form>
+        </h:form>                            
     </h:body>
 </html>
