@@ -16,6 +16,7 @@ import it.usr.web.neve.service.IstruttoriaService;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -227,8 +228,14 @@ public class IstruttoriaController extends BaseController {
             // L'id istruttoria è cambiato? Rinomina la cartella prima di fare il resto
             if(!istruttoria.getIdpratica().equalsIgnoreCase(oldIdPratica) && oldIdPratica!=null) {
                 Path pSrc = Paths.get(basePath + sanitizePath(oldIdPratica) + "/");
-                Path pDest = Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/");
-                Files.move(pSrc, pDest, StandardCopyOption.ATOMIC_MOVE);
+                if(Files.exists(pSrc, LinkOption.NOFOLLOW_LINKS)) {
+                    Path pDest = Paths.get(basePath + sanitizePath(istruttoria.getIdpratica()) + "/");
+                    Files.move(pSrc, pDest, StandardCopyOption.ATOMIC_MOVE);
+                    logger.debug("Pratica [{}] cartella rinominata da [{}] a [{}].", istruttoria.getId(), pSrc.toString(), pDest.toString());
+                }
+                else {
+                    logger.debug("Pratica [{}] non ha cartella di file da rinominare.", istruttoria.getId());
+                }
             }
             
             if (documento.getFileName() != null) {
