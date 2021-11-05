@@ -1,9 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:of='http://omnifaces.org/functions'>
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,11 +9,7 @@
         <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
         <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
         <link rel="stylesheet" href="../css/styles.css" />
-        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
-
-        <f:metadata>
-            <f:viewAction action="#{statisticheController.initialize()}" />
-        </f:metadata>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />       
     </h:head>
     <h:body>
         <h:form enctype="multipart/form-data" id="mainform">
@@ -34,7 +28,7 @@
                 </div>
             </header>
             <main>
-                <div class="layout-menu-wrapper" id="layout-menu-wrapper">
+                <div class="layout-menu-wrapper" id="layout-menu-wrapper" style="width: 180px !important">
                     <ul class="layout-menu" id="layout-menu">
                         <li>
                             <div class="menuitem-root-text mt-3" style="display: block">
@@ -71,7 +65,7 @@
                     </ul>
                 </div>
 
-                <div class="layout-main">
+                <div class="layout-main" style="margin-left: 180px !important">
                     <div class="layout-content documentation" id="doc">
                         <div class="ui-fluid">
                             <div class='card'>

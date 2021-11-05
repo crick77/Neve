@@ -41,7 +41,7 @@
                 </div>
             </header>
             <main>
-                <div class="layout-menu-wrapper" id="layout-menu-wrapper">
+                <div class="layout-menu-wrapper" id="layout-menu-wrapper" style="width: 180px !important">
                     <ul class="layout-menu" id="layout-menu">
                         <li class="active-menuitem">
                             <div class="menuitem-root-text mt-3" style="display: block">
@@ -78,7 +78,7 @@
                     </ul>
                 </div>
 
-                <div class="layout-main">
+                <div class="layout-main" style="margin-left: 180px !important">
                     <div class="layout-content documentation" id="doc">
                         <div>
                             <h5>Esporta dati visualizzati</h5>
@@ -86,7 +86,7 @@
                                 <p:dataExporter type="xls" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true"/>
                             </p:commandButton>
 
-                            <p:commandButton value="XLXS" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
+                            <p:commandButton value="XLSX" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
                                 <p:dataExporter type="xlsxstream" target="dtIstruttorie" fileName="istruttorie-#{istruttorieController.oggi}" pageOnly="true"/>
                             </p:commandButton>
 
@@ -96,9 +96,9 @@
                         </div>
                         <div class="p-d-flex">     
                             <p:dataTable id="dtIstruttorie" var="istruttoria" value="#{istruttorieController.istruttorie}" stripedRows="true" size="small" rowHover="true" reflow="true" emptyMessage="Nessun record presente o corrispondente ai criteri specificati."
-                                         widgetVar="istruttoriaTable" filteredValue="#{istruttorieController.filteredIstruttorie}"> 
+                                         widgetVar="istruttoriaTable" filteredValue="#{istruttorieController.filteredIstruttorie}" selectionMode="single" rowKey="#{istruttoria.id}"> 
                                 <p:ajax event="filter" update="mainform:totals" />
-                                <p:column style="width:2rem" exportable="false">
+                                <p:column style="width:1rem" exportable="false">
                                     <p:rowToggler/>
                                 </p:column>
                                 <p:column headerText="COMUNE" field="comune.comune" filterMatchMode="exact" width="240">
@@ -111,8 +111,8 @@
                                 </p:column>
                                 <p:column headerText="COGNOME" field="cognome" filterable="true" filterMatchMode="contains" sortable="true" width="200"/>                                    
                                 <p:column headerText="NOME" field="nome" filterable="true" filterMatchMode="contains" sortable="true" width="200" />
-                                <p:column headerText="# PRATICA" field="idpratica" filterable="true" filterMatchMode="contains" sortable="true" width="140" />                                    
-                                <p:column headerText="STATO" filterMatchMode="exact" field="stato.stato" width="140">                                    
+                                <p:column headerText="# PRATICA" field="idpratica" filterable="true" filterMatchMode="contains" sortable="true" width="100" />                                    
+                                <p:column headerText="STATO" filterMatchMode="exact" field="stato.stato" width="100">                                    
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
                                             <f:selectItem itemLabel="- TUTTI -" itemValue="#{null}" noSelectionOption="true" />
@@ -120,37 +120,42 @@
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:column> 
-                                <p:column headerText="IMPORTO LAVORI" field="importolavori" sortable="true" filterable="false" style="text-align: right" width="200">
+                                
+                                <!--
+                                
+                                <p:column headerText="IMPORTO LAVORI" field="importolavori" sortable="true" filterable="false" style="text-align: right" width="110">
                                     <h:outputText value="#{istruttoria.importolavori}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
                                 </p:column>                 
-                                <p:column headerText="IVA LAVORI" field="ivalavori" sortable="true" filterable="false" style="text-align: right" width="200">
+                                <p:column headerText="IVA LAVORI" field="ivalavori" sortable="true" filterable="false" style="text-align: right" width="100">
                                     <h:outputText value="#{istruttoria.ivalavori}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
                                 </p:column>                 
-                                <p:column headerText="SPESE TECNICHE" field="spesetecniche" sortable="true" filterable="false" style="text-align: right" width="200">
+                                <p:column headerText="SPESE TECNICHE" field="spesetecniche" sortable="true" filterable="false" style="text-align: right" width="100">
                                     <h:outputText value="#{istruttoria.spesetecniche}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
                                 </p:column>                 
-                                <p:column headerText="ST PERIZIA" field="stperizia" sortable="true" filterable="false" style="text-align: right" width="200">
+                                <p:column headerText="S.T. PERIZIA" field="stperizia" sortable="true" filterable="false" style="text-align: right" width="100">
                                     <h:outputText value="#{istruttoria.stperizia}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
                                 </p:column>                 
-                                <p:column headerText="IVA ST PERIZIA" field="ivastperizia" sortable="true" filterable="false" style="text-align: right" width="200">
+                                <p:column headerText="IVA S.T.+PERIZIA" field="ivastperizia" sortable="true" filterable="false" style="text-align: right" width="100">
                                     <h:outputText value="#{istruttoria.ivastperizia}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
-                                </p:column>                 
-                                <p:column headerText="TOTALE" field="totale" sortable="true" filterable="false" style="text-align: right" width="200">
+                                </p:column>       
+                                -->          
+                                
+                                <p:column headerText="TOTALE" field="totale" sortable="true" filterable="false" style="text-align: right" width="100">
                                     <h:outputText value="#{istruttoria.totale}">
                                         <f:convertNumber pattern="#,##0.00 €" />
                                     </h:outputText>
                                 </p:column> 
-                                <p:column headerText="TIPOLOGIA" field="tipologia" sortable="true" filterable="true" style="text-align: right" width="150">
+                                <p:column headerText="TIPOLOGIA" field="tipologia" sortable="true" filterable="true" style="text-align: right" width="110">
                                     <f:facet name="filter">
                                         <p:selectOneMenu onchange="PF('istruttoriaTable').filter()" styleClass="custom-filter">
                                             <f:selectItem itemLabel="- TUTTE -" itemValue="#{null}" noSelectionOption="true" />
@@ -189,6 +194,35 @@
                                 </p:column>
 
                                 <p:rowExpansion>
+                                    <p:panel header="Dettaglio Importi">
+                                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2, ui-g-12 ui-md-6 ui-lg-1">
+                                            <h:outputLabel value="IMPORTO LAVORI" />
+                                            <h:outputText value="#{istruttoria.importolavori}">
+                                                <f:convertNumber pattern="#,##0.00 €" />
+                                            </h:outputText>
+                                
+                                            <h:outputLabel value="IVA LAVORI" />
+                                            <h:outputText value="#{istruttoria.ivalavori}">
+                                                <f:convertNumber pattern="#,##0.00 €" />
+                                            </h:outputText>
+                                 
+                                            <h:outputLabel value="SPESE TECNICHE" />                                            
+                                            <h:outputText value="#{istruttoria.spesetecniche}">
+                                                <f:convertNumber pattern="#,##0.00 €" />
+                                            </h:outputText>
+                                
+                                            <h:outputLabel value="S.T. PERIZIA" />                                                                            
+                                            <h:outputText value="#{istruttoria.stperizia}">
+                                                <f:convertNumber pattern="#,##0.00 €" />
+                                            </h:outputText>
+                                
+                                            <h:outputLabel value="IVA S.T. + PERIZIA" />                                                                                                            
+                                            <h:outputText value="#{istruttoria.ivastperizia}">
+                                                <f:convertNumber pattern="#,##0.00 €" />
+                                            </h:outputText>                                
+                                        </p:panelGrid>                                                                                    
+                                    </p:panel>
+                                    <br/>
                                     <p:panel header="Note">
                                         <h:panelGroup rendered="#{fn:length(istruttoria.note)>0}">
                                             #{istruttoria.note}
