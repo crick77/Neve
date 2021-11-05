@@ -6,10 +6,13 @@
 package it.usr.web.neve.controller;
 
 import it.usr.web.neve.domain.Utente;
+import it.usr.web.neve.producer.NeveLogger;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import org.slf4j.Logger;
 
 /**
  *
@@ -19,6 +22,9 @@ public abstract class BaseController implements Serializable {
     public final static long serialVersionUID = 1L;
     public final static String SAME_VIEW = null;
     public final static String CURRENCY_PATTERN = "#,##0.00 €";
+    @Inject
+    @NeveLogger
+    Logger baseLogger;
 
     public Map<String, Object> getSessionMap() {
         return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
@@ -72,7 +78,14 @@ public abstract class BaseController implements Serializable {
     }
 
     public String decimalFormat(Object data, String format) {
-        return new DecimalFormat(format).format(data);
+        try {
+            return new DecimalFormat(format).format(data);
+        }
+        catch(RuntimeException e) {
+            String dtype = (data!=null) ? data.getClass().toString() : "null-reference";
+            baseLogger.error("Errore conversione [{}] tipo [[{}] in formato [{}]. Eccezione [{}]", data, dtype, format, e);
+            throw e;
+        }
     }
 
     public static String getSessionClassName(Class c) {
