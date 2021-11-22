@@ -9,7 +9,10 @@ import it.usr.web.neve.domain.Comune;
 import it.usr.web.neve.domain.Esito;
 import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
+import it.usr.web.neve.domain.Utente;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -103,5 +106,15 @@ public class IstruttoriaService {
         
         Istruttoria i = em.find(Istruttoria.class, is.getId());
         em.remove(i);        
+    }
+    
+    public Map<String, Long> getLavorazioniUtente() {
+        List<Utente> utenti = em.createNamedQuery("Utente.findByAbilitato", Utente.class).setParameter("abilitato", true).getResultList();
+        Map<String, Long> res = new HashMap<>();
+        for(Utente u : utenti) {
+            Long count = em.createQuery("SELECT count(i) FROM Istruttoria i WHERE i.proprietario = :utente", Long.class).setParameter("utente", u).getSingleResult();
+            res.put(u.getUsername(), count);
+        }
+        return res;
     }
 }

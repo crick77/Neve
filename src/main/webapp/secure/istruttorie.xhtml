@@ -34,7 +34,7 @@
                     </div>
                     <div class="layout-topbar-left">
                         <div>
-                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
+                            <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
                         </div>
                         <ul class="topbar-menu"><li><span class="pi pi-user" /> Benvenuto, <i>#{utente.username}!</i><h:outputText rendered="#{utente.admin}" value=" - Amministratore" /></li></ul>
                     </div>                                        
@@ -67,6 +67,16 @@
                                 STATISTICHE
                             </a>
                         </li>
+                        <ui:fragment rendered="#{utente.admin}">
+                            <li> 
+                                <div class="menuitem-root-text mt-3">
+                                    LAVORAZIONI
+                                </div>
+                                <a href="lavorazioni.xhtml" style="display: block">
+                                    LAVORAZIONI
+                                </a>
+                            </li>
+                        </ui:fragment>                        
                         <li>  
                             <div class="menuitem-root-text mt-3">
                                 ESCI
@@ -120,7 +130,7 @@
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:column> 
-                                
+
                                 <!--
                                 
                                 <p:column headerText="IMPORTO LAVORI" field="importolavori" sortable="true" filterable="false" style="text-align: right" width="110">
@@ -149,7 +159,7 @@
                                     </h:outputText>
                                 </p:column>       
                                 -->          
-                                
+
                                 <p:column headerText="TOTALE" field="totale" sortable="true" filterable="false" style="text-align: right" width="100">
                                     <h:outputText value="#{istruttoria.totale}">
                                         <f:convertNumber pattern="#,##0.00 €" />
@@ -200,22 +210,22 @@
                                             <h:outputText value="#{istruttoria.importolavori}">
                                                 <f:convertNumber pattern="#,##0.00 €" />
                                             </h:outputText>
-                                
+
                                             <h:outputLabel value="IVA LAVORI" />
                                             <h:outputText value="#{istruttoria.ivalavori}">
                                                 <f:convertNumber pattern="#,##0.00 €" />
                                             </h:outputText>
-                                 
+
                                             <h:outputLabel value="SPESE TECNICHE" />                                            
                                             <h:outputText value="#{istruttoria.spesetecniche}">
                                                 <f:convertNumber pattern="#,##0.00 €" />
                                             </h:outputText>
-                                
+
                                             <h:outputLabel value="S.T. PERIZIA" />                                                                            
                                             <h:outputText value="#{istruttoria.stperizia}">
                                                 <f:convertNumber pattern="#,##0.00 €" />
                                             </h:outputText>
-                                
+
                                             <h:outputLabel value="IVA S.T. + PERIZIA" />                                                                                                            
                                             <h:outputText value="#{istruttoria.ivastperizia}">
                                                 <f:convertNumber pattern="#,##0.00 €" />
