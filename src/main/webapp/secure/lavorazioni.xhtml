@@ -86,16 +86,16 @@
                     <div class="layout-content documentation" id="doc">
                         <div class="card" style="width:30%; margin-left: 10px">
                             <h2>Totale pratiche lavorate per utente:</h2>
-                            <p:dataTable value="#{lavorazioniController.lavorazioni}" var="e" rowHover="true" stripedRows="true" size="small" reflow="true" showGridlines="true" >
-                                <p:column headerText="Utente">
-                                    <h:outputText value="#{e.key}" />
+                            <p:dataTable value="#{lavorazioniController.lavorazioni}" var="lav" rowHover="true" stripedRows="true" size="small" reflow="true" showGridlines="true" sortMode="single">
+                                <p:column headerText="Utente" sortBy="username">
+                                    <h:outputText value="#{lav.username}" />
                                 </p:column>
-                                <p:column headerText="Pratiche lavorate">
-                                    <h:outputText value="#{e.value}" />
+                                <p:column headerText="Pratiche lavorate" sortBy="numLavorazioni">
+                                    <h:outputText value="#{lav.numLavorazioni}" />
                                 </p:column>
-                                <p:column headerText="% sul totale">
-                                    <h:outputText value="#{e.value/lavorazioniController.totaleLavorate}">
-                                        <f:convertNumber pattern="0.0%" />
+                                <p:column headerText="% sul totale" sortBy="percentuale">
+                                    <h:outputText value="#{lav.percentuale}">
+                                        <f:convertNumber pattern="0.00%" />
                                     </h:outputText>
                                 </p:column>
                                 

@@ -6,9 +6,10 @@
 package it.usr.web.neve.controller;
 
 import it.usr.web.neve.domain.Utente;
+import it.usr.web.neve.model.Lavorazioni;
 import it.usr.web.neve.producer.NeveLogger;
 import it.usr.web.neve.service.IstruttoriaService;
-import java.util.Map;
+import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,7 +27,7 @@ public class LavorazioniController extends BaseController {
     @Inject
     @NeveLogger
     Logger logger;
-    Map<String, Long> lavorazioni;
+    List<Lavorazioni> lavorazioni;
     long totale;
     
     public String initialize() {
@@ -38,17 +39,17 @@ public class LavorazioniController extends BaseController {
         
         lavorazioni = is.getLavorazioniUtente();
         totale = 0;
-        lavorazioni.values().forEach(v -> {
-            totale+=v;
+        lavorazioni.forEach(v -> {
+            totale+=v.getNumLavorazioni();
         });
         return SAME_VIEW;
     }
 
-    public Map<String, Long> getLavorazioni() {
+    public List<Lavorazioni> getLavorazioni() {
         return lavorazioni;
     }
 
-    public void setLavorazioni(Map<String, Long> lavorazioni) {
+    public void setLavorazioni(List<Lavorazioni> lavorazioni) {
         this.lavorazioni = lavorazioni;
     }   
     

@@ -10,9 +10,9 @@ import it.usr.web.neve.domain.Esito;
 import it.usr.web.neve.domain.Istruttoria;
 import it.usr.web.neve.domain.Statolavori;
 import it.usr.web.neve.domain.Utente;
-import java.util.HashMap;
+import it.usr.web.neve.model.Lavorazioni;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -108,13 +108,23 @@ public class IstruttoriaService {
         em.remove(i);        
     }
     
-    public Map<String, Long> getLavorazioniUtente() {
-        List<Utente> utenti = em.createNamedQuery("Utente.findByAbilitato", Utente.class).setParameter("abilitato", true).getResultList();
-        Map<String, Long> res = new HashMap<>();
+    public List<Lavorazioni> getLavorazioniUtente() {
+        List<Utente> utenti = em.createNamedQuery("Utente.findByAbilitatoSorted", Utente.class).setParameter("abilitato", true).getResultList();
+        List<Lavorazioni> lLav = new ArrayList<>();
+        double total = 0;
         for(Utente u : utenti) {
-            Long count = em.createQuery("SELECT count(i) FROM Istruttoria i WHERE i.proprietario = :utente", Long.class).setParameter("utente", u).getSingleResult();
-            res.put(u.getUsername(), count);
+            long count = em.createQuery("SELECT count(i) FROM Istruttoria i WHERE i.proprietario = :utente", Long.class).setParameter("utente", u).getSingleResult();
+            total+=count;
+            Lavorazioni lav = new Lavorazioni(u.getUsername(), count, 0);
+            
+            lLav.add(lav);
         }
-        return res;
+        
+        for(Lavorazioni l : lLav) {
+            double perc = l.getNumLavorazioni()/total;
+            l.setPercentuale(perc);
+        }
+        
+        return lLav;
     }
 }
