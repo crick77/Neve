@@ -6,6 +6,7 @@
 package it.usr.web.neve.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  *
@@ -14,15 +15,17 @@ import java.io.Serializable;
 public class Lavorazioni implements Serializable {
     private String username;
     private long numLavorazioni;
+    private BigDecimal importo;
     private double percentuale;
 
     public Lavorazioni() {
     }
         
-    public Lavorazioni(String username, long numLavorazioni, double percentuale) {
+    public Lavorazioni(String username, long numLavorazioni, BigDecimal importo) {
         this.username = username;
         this.numLavorazioni = numLavorazioni;
-        this.percentuale = percentuale;
+        this.importo = importo;
+        this.percentuale = 0;
     }
 
     public String getUsername() {
@@ -41,6 +44,14 @@ public class Lavorazioni implements Serializable {
         this.numLavorazioni = numLavorazioni;
     }
 
+    public BigDecimal getImporto() {
+        return importo;
+    }
+
+    public void setImporto(BigDecimal importo) {
+        this.importo = importo;
+    }
+        
     public double getPercentuale() {
         return percentuale;
     }

@@ -9,6 +9,7 @@ import it.usr.web.neve.domain.Utente;
 import it.usr.web.neve.model.Lavorazioni;
 import it.usr.web.neve.producer.NeveLogger;
 import it.usr.web.neve.service.IstruttoriaService;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -28,7 +29,8 @@ public class LavorazioniController extends BaseController {
     @NeveLogger
     Logger logger;
     List<Lavorazioni> lavorazioni;
-    long totale;
+    long totalePratiche;
+    BigDecimal totaleImporto;
     
     public String initialize() {
         Utente u = getUtente();
@@ -38,9 +40,11 @@ public class LavorazioniController extends BaseController {
         }
         
         lavorazioni = is.getLavorazioniUtente();
-        totale = 0;
+        totalePratiche = 0;
+        totaleImporto = new BigDecimal(0);
         lavorazioni.forEach(v -> {
-            totale+=v.getNumLavorazioni();
+            totalePratiche+=v.getNumLavorazioni();
+            totaleImporto = totaleImporto.add(v.getImporto());
         });
         return SAME_VIEW;
     }
@@ -54,6 +58,10 @@ public class LavorazioniController extends BaseController {
     }   
     
     public long getTotaleLavorate() {
-        return this.totale;
+        return this.totalePratiche;
+    }
+    
+    public BigDecimal getTotaleImporto() {
+        return this.totaleImporto;
     }
 }

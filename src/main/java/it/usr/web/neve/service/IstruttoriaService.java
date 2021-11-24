@@ -113,9 +113,8 @@ public class IstruttoriaService {
         List<Lavorazioni> lLav = new ArrayList<>();
         double total = 0;
         for(Utente u : utenti) {
-            long count = em.createQuery("SELECT count(i) FROM Istruttoria i WHERE i.proprietario = :utente", Long.class).setParameter("utente", u).getSingleResult();
-            total+=count;
-            Lavorazioni lav = new Lavorazioni(u.getUsername(), count, 0);
+            Lavorazioni lav = em.createQuery("SELECT new it.usr.web.neve.model.Lavorazioni(i.proprietario.username, count(i), sum(i.totale)) FROM Istruttoria i WHERE i.proprietario = :utente", Lavorazioni.class).setParameter("utente", u).getSingleResult();            
+            total+=lav.getNumLavorazioni();
             
             lLav.add(lav);
         }
