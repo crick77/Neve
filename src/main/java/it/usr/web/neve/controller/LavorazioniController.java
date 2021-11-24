@@ -44,7 +44,9 @@ public class LavorazioniController extends BaseController {
         totaleImporto = new BigDecimal(0);
         lavorazioni.forEach(v -> {
             totalePratiche+=v.getNumLavorazioni();
-            totaleImporto = totaleImporto.add(v.getImporto());
+            if(v.getImporto()!=null) {
+                totaleImporto = totaleImporto.add(v.getImporto());
+            }
         });
         return SAME_VIEW;
     }

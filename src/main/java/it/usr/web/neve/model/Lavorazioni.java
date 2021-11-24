@@ -20,11 +20,16 @@ public class Lavorazioni implements Serializable {
 
     public Lavorazioni() {
     }
-        
+
+    public Lavorazioni(long numLavorazioni, BigDecimal importo) {
+        this.numLavorazioni = numLavorazioni;
+        this.importo = (importo!=null) ? importo : new BigDecimal(0);
+    }
+              
     public Lavorazioni(String username, long numLavorazioni, BigDecimal importo) {
         this.username = username;
         this.numLavorazioni = numLavorazioni;
-        this.importo = importo;
+        this.importo = (importo!=null) ? importo : new BigDecimal(0);
         this.percentuale = 0;
     }
 
@@ -49,7 +54,7 @@ public class Lavorazioni implements Serializable {
     }
 
     public void setImporto(BigDecimal importo) {
-        this.importo = importo;
+        this.importo = (importo!=null) ? importo : new BigDecimal(0);
     }
         
     public double getPercentuale() {
