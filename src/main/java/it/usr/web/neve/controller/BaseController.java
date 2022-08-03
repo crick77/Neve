@@ -10,6 +10,7 @@ import it.usr.web.neve.producer.NeveLogger;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -123,5 +124,14 @@ public abstract class BaseController implements Serializable {
     
     public String sanitizePath(String s) {
         return (s!=null) ? s.replaceAll("[\\/|\\\\|\\?|\\<|\\>|\\*|\\:|\\|]+", "_") : null;
+    }
+    
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        addMessage(null, severity, summary, detail);
+    }
+
+    public void addMessage(String id, FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(id, new FacesMessage(severity, summary, detail));
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -95,10 +94,7 @@ public class Statolavori implements Serializable {
             return false;
         }
         Statolavori other = (Statolavori) object;
-        if ((this.stato == null && other.stato != null) || (this.stato != null && !this.stato.equals(other.stato))) {
-            return false;
-        }
-        return true;
+        return !((this.stato == null && other.stato != null) || (this.stato != null && !this.stato.equals(other.stato)));
     }
 
     @Override

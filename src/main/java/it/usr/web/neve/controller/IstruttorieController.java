@@ -8,7 +8,6 @@ package it.usr.web.neve.controller;
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import it.usr.web.neve.domain.Comune;
 import it.usr.web.neve.domain.Esito;

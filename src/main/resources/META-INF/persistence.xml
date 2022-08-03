@@ -3,9 +3,11 @@
   <!-- Define Persistence Unit -->
   <persistence-unit name="neve_PU" transaction-type="JTA">
     <jta-data-source>jdbc/usrneve</jta-data-source>
+    <class>it.usr.web.neve.domain.Stato</class>
+    <class>it.usr.web.neve.domain.Oopp</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-        <property name="eclipselink.target-database" value="MySQL"/>
+      <property name="eclipselink.target-database" value="MySQL"/>
     </properties>
   </persistence-unit>
 </persistence>

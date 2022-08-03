@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>USR NEVE - OP</title>
+        <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
+        <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <script src="../js/site.js" language="Javascript" />
+        <script>
+            PrimeFaces.locales['it'] = {
+                closeText: 'Chiudi',
+                prevText: 'Precedente',
+                nextText: 'Successivo',
+                monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+                monthNamesShort: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+                dayNames: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
+                dayNamesMin: ['D', 'L', 'Ma', 'Me', 'G', 'V', 'S'],
+                weekHeader: 'Settimana',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Solo orario',
+                timeText: 'Tempo',
+                hourText: 'Ora',
+                minuteText: 'Minuto',
+                secondText: 'Secondo',
+                millisecondText: 'Milisecondo',
+                currentText: 'Data odierna',
+                ampm: false,
+                month: 'Mese',
+                week: 'Settimana',
+                day: 'Giorno',
+                allDayText: 'Tutto il giorno',
+                today: 'Oggi',
+                clear: 'Pulisci'
+            };
+        </script>
+        <f:metadata>
+            <f:viewParam name="id" value="#{OPController.id}" />
+            <f:viewAction action="#{OPController.initialize()}" />            
+        </f:metadata>
+    </h:head>
+    <h:body>
+        <h:form enctype="multipart/form-data" id="mainform">
+            <header>
+                <div class="layout-topbar flex align-items-center justify-content-between">
+                    <div class="mobile-menu-wrapper">
+                        <a class="mobile-button" id="mobile-button" ><i class="pi pi-bars"></i></a>                    
+                        <img src="../images/logomain.png" alt="prime" id="mobile-logo" />                    
+                    </div>
+                    <div class="layout-topbar-left">
+                        <div>
+                        <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
+                        </div>
+                        <ul class="topbar-menu"><li><span class="pi pi-user" /> Benvenuto, <i>#{utente.username}!</i><h:outputText rendered="#{utente.admin}" value=" - Amministratore" /></li></ul>
+                    </div> 
+                </div>
+            </header>
+            <main>
+                <div class="layout-menu-wrapper" id="layout-menu-wrapper" style="width: 180px !important">
+                    <ul class="layout-menu" id="layout-menu">
+                        <li>
+                            <div class="menuitem-root-text mt-3" style="display: block">
+                                USR NEVE
+                            </div>
+                            <a href="istruttorie.xhtml" style="display: block">
+                                ISTRUTTORIE
+                            </a>
+                        </li>
+                        <li class="active-menuitem">
+                            <div class="menuitem-root-text mt-3">
+                                #{istruttoriaController.istruttoria.id==null ? 'NUOVA' : 'MODIFICA'}
+                            </div>
+                            <ui:fragment rendered="#{empty istruttoriaController.istruttoria.id}">
+                                <a href="istruttoria.xhtml" style="display: block">
+                                    NUOVA
+                                </a>
+                            </ui:fragment>                            
+                        </li>
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                STATISTICHE
+                            </div>
+                            <a href="stats.xhtml" style="display: block">
+                                STATISTICHE
+                            </a>
+                        </li>
+                        <ui:fragment rendered="#{utente.admin}">
+                            <li> 
+                                <div class="menuitem-root-text mt-3">
+                                    LAVORAZIONI
+                                </div>
+                                <a href="lavorazioni.xhtml" style="display: block">
+                                    LAVORAZIONI
+                                </a>
+                            </li>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{utente.admin}">
+                            <li class="active-menuitem"> 
+                                <div class="menuitem-root-text mt-3">
+                                    OO.PP.
+                                </div>
+                                <a href="oopp.xhtml" style="display: block">
+                                    OO.PP.
+                                </a>
+                            </li>
+                        </ui:fragment>
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                ESCI
+                            </div>
+                            <a href="quit.xhtml" style="display: block">
+                                ESCI
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="layout-main" style="margin-left: 180px !important">
+                    <div class="layout-content documentation" id="doc">
+                        <div class="ui-fluid">
+                            <div class="p-field">
+                                <label for="idpratica"># PRATICA</label>
+                                <p:inputText id="idpratica" value="#{OPController.op.idPratica}" required="true" requiredMessage="# pratica obbligatorio" maxlength="12">
+                                   
+                                </p:inputText>
+                            </div>
+                            <div class="p-field">
+                                <label for="ente">ENTE</label>
+                                <p:autoComplete id="ente" value="#{OPController.op.ente}" required="true" requiredMessage="Ente obbligatorio" maxlength="64" completeMethod="#{OPController.suggerisciEnte}" scrollHeight="250"/>                               
+                            </div>
+                            <div class="p-field">
+                                <label for="prov">ENTE</label>
+                                <p:selectOneMenu id="prov" value="#{OPController.op.prov}" required="true" requiredMessage="Provincia obbligatoria">
+                                    <f:selectItem itemValue="AQ" itemLabel="L'AQUILA" />
+                                    <f:selectItem itemValue="CH" itemLabel="CHIETI" />
+                                    <f:selectItem itemValue="PE" itemLabel="PESCARA" />
+                                    <f:selectItem itemValue="TE" itemLabel="TERAMO" />
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
+                                <label for="priorita">PRIORITA'</label>
+                                <p:spinner id="priorita" value="#{OPController.op.priorita}" required="true" requiredMessage="Priorità obbligatoria" min="1" max="10" />
+                            </div>
+                            <div class="p-field">
+                                <label for="localizzazione">LOCALIZZAZIONE</label>
+                                <p:inputText id="localizzazione" value="#{OPController.op.localizzazione}" required="true" requiredMessage="Localizzazione obbligatoria" maxlength="64"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="oggetto">OGGETTO</label>
+                                <p:inputText id="oggetto" value="#{OPController.op.oggetto}" required="true" requiredMessage="Oggetto obbligatorio" maxlength="255"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="attuatore">SOGGETTO ATTUATORE</label>
+                                <p:autoComplete id="attuatore" value="#{OPController.op.attuatore}" required="true" requiredMessage="Attuatore obbligatorio" maxlength="64" completeMethod="#{OPController.suggerisciAttuatore}" scrollHeight="250"/>                               
+                            </div>
+                            <div class="p-field">
+                                <label for="contotu">CONTO TU</label>
+                                <p:inputText id="contotu" value="#{OPController.op.contoTu}" required="true" requiredMessage="Conto TU obbligatorio" maxlength="16"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="importo">IMPORTO ASSEGNATO</label>
+                                <p:inputNumber id="importo" value="#{OPController.op.importoAssegnato}" required="true" requiredMessage="Importo obbligatorio" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="cup">CUP</label>
+                                <p:inputText id="cup" value="#{OPController.op.cup}" required="true" requiredMessage="CUP obbligatorio" maxlength="16">
+
+                                </p:inputText>
+                            </div>
+                            <div class="p-field">
+                                <label for="stato">STATO</label>
+                                <p:selectOneMenu id="stato" value="#{OPController.op.idStato}" required="true" requiredMessage="Stato obbligatorio" converter="statoConverter">                                    
+                                    <f:selectItems value="#{OPController.stati}" var="s" itemLabel="#{s.descrizione}" itemValue="#{s}" />
+                                </p:selectOneMenu>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="panticImporto">IMPORTO ANTICIPO 10%</label>
+                                <p:inputNumber id="panticImporto" value="#{OPController.op.panticImporto}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false" />
+                            </div>
+                            <div class="p-field">
+                                <label for="panticNDecreto"># DECRETO ANTICIPO 10%</label>
+                                <p:inputNumber id="panticNDecreto" value="#{OPController.op.panticNDecreto}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="panticDataDecreto">DATA DECRETO ANTICIPO 10%</label>
+                                <p:datePicker id="panticDataDecreto" value="#{OPController.op.panticDataDecreto}" showIcon="true" locale="it"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="panticNMandato"># MANDATO ANTICIPO 10%</label>
+                                <p:inputNumber id="panticNMandato" value="#{OPController.op.panticNMandato}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="panticDataDecreto">DATA MANDATO ANTICIPO 10%</label>
+                                <p:datePicker id="panticDataMandato" value="#{OPController.op.panticDataMandato}" showIcon="true" locale="it"/>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="santicImporto">IMPORTO ANTICIPO 20%</label>
+                                <p:inputNumber id="santicImporto" value="#{OPController.op.santicImporto}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="santicNDecreto"># DECRETO ANTICIPO 20%</label>
+                                <p:inputNumber id="santicNDecreto" value="#{OPController.op.santicNDecreto}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="santicDataDecreto">DATA DECRETO ANTICIPO 20%</label>
+                                <p:datePicker id="santicDataDecreto" value="#{OPController.op.santicDataDecreto}" showIcon="true" locale="it"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="santicNMandato"># MANDATO ANTICIPO 20%</label>
+                                <p:inputNumber id="santicNMandato" value="#{OPController.op.santicNMandato}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="santicDataMandato">DATA MANDATO ANTICIPO 20%</label>
+                                <p:datePicker id="santicDataMandato" value="#{OPController.op.santicDataMandato}" showIcon="true" locale="it"/>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="psalImporto">IMPORTO 1° SAL</label>
+                                <p:inputNumber id="psalImporto" value="#{OPController.op.psalImporto}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="psalNDecreto"># DECRETO 1° SAL</label>
+                                <p:inputNumber id="psalNDecreto" value="#{OPController.op.psalNDecreto}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="psalDataDecreto">DATA DECRETO 1° SAL</label>
+                                <p:datePicker id="psalDataDecreto" value="#{OPController.op.psalDataDecreto}" showIcon="true" locale="it"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="psalNMandato"># MANDATO 1° SAL</label>
+                                <p:inputNumber id="psalNMandato" value="#{OPController.op.psalNMandato}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="psalDataMandato">DATA MANDATO 1° SAL</label>
+                                <p:datePicker id="psalDataMandato" value="#{OPController.op.psalDataMandato}" showIcon="true" locale="it"/>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="ssalImporto">IMPORTO 2° SAL</label>
+                                <p:inputNumber id="ssalImporto" value="#{OPController.op.ssalImporto}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="ssalNDecreto"># DECRETO 2° SAL</label>
+                                <p:inputNumber id="ssalNDecreto" value="#{OPController.op.ssalNDecreto}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="ssalDataDecreto">DATA DECRETO 2° SAL</label>
+                                <p:datePicker id="ssalDataDecreto" value="#{OPController.op.ssalDataDecreto}" showIcon="true" locale="it"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="ssalNMandato"># MANDATO 2° SAL</label>
+                                <p:inputNumber id="ssalNMandato" value="#{OPController.op.ssalNMandato}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="ssalDataMandato">DATA MANDATO 2° SAL</label>
+                                <p:datePicker id="ssalDataMandato" value="#{OPController.op.ssalDataMandato}" showIcon="true" locale="it"/>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="saldoImporto">IMPORTO SALDO</label>
+                                <p:inputNumber id="saldoImporto" value="#{OPController.op.saldoImporto}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="saldoNDecreto"># DECRETO SALDO</label>
+                                <p:inputNumber id="saldoNDecreto" value="#{OPController.op.saldoNDecreto}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator=""/>
+                            </div>
+                            <div class="p-field">
+                                <label for="saldoDataDecreto">DATA DECRETO SALDO</label>
+                                <p:datePicker id="saldoDataDecreto" value="#{OPController.op.saldoDataDecreto}" showIcon="true" locale="it"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="saldoNMandato"># MANDATO SALDO</label>
+                                <p:inputNumber id="saldoNMandato" value="#{OPController.op.saldoNMandato}" modifyValueOnWheel="false" decimalPlaces="0" thousandSeparator="" />
+                            </div>
+                            <div class="p-field">
+                                <label for="saldoDataMandato">DATA MANDATO SALDO</label>
+                                <p:datePicker id="saldoDataMandato" value="#{OPController.op.saldoDataMandato}" showIcon="true" locale="it"/>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="economie">ECONOMIE</label>
+                                <p:inputNumber id="economie" value="#{OPController.op.economie}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
+                            </div>
+                            
+                            <div class="p-field p-grid">     
+                                <div class="p-col-3">
+                                    <p:commandButton id="ok" value="Salva" action="#{OPController.salva}" icon="pi pi-save" update="@form" ajax="false" disabled="#{OPController.conflitto}"/>
+                                </div>                                
+                                <div class="p-col-3">
+                                    <p:commandButton id="cancel" value="Annulla" icon="pi pi-times" styleClass="ui-button-secondary" action="#{OPController.annulla()}" ajax="false" immediate="true" />
+                                </div>                                
+                            </div>
+
+                            <p:growl id="messages" showDetail="true"/>
+                        </div>                        
+                    </div>                
+                </div>
+
+                <div id="layout-mask" class="layout-mask"></div>
+            </main>
+        </h:form>                            
+    </h:body>
+</html>

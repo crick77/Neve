@@ -1,0 +1,277 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>USR NEVE - OO.PP.</title>
+        <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />        
+        <link rel="stylesheet" id="layout-css" href="../css/themes/saga-blue.css" />        
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <style>
+            .red {
+                color: red;
+            }
+            .truncate {
+                white-space: nowrap;                
+                text-overflow: ellipsis;
+            }
+        </style>
+
+        <f:metadata>
+            <f:viewAction action="#{OOPPController.initialize()}" />
+        </f:metadata>
+    </h:head>
+    <h:body>
+        <h:form id="mainform">
+            <header>
+                <div class="layout-topbar flex align-items-center justify-content-between">
+                    <div class="mobile-menu-wrapper">
+                        <a class="mobile-button" id="mobile-button" ><i class="pi pi-bars"></i></a>                    
+                        <img src="../images/logomain.png" alt="prime" id="mobile-logo" />                    
+                    </div>
+                    <div class="layout-topbar-left">
+                        <div>
+                            <img src="../images/logomain.png" alt="prime" id="topbar-logo" />                        
+                        </div>
+                        <ul class="topbar-menu"><li><span class="pi pi-user" /> Benvenuto, <i>#{utente.username}!</i><h:outputText rendered="#{utente.admin}" value=" - Amministratore" /></li></ul>
+                    </div>                                        
+                </div>
+            </header>
+            <main>
+                <div class="layout-menu-wrapper" id="layout-menu-wrapper" style="width: 180px !important">
+                    <ul class="layout-menu" id="layout-menu">
+                        <li>
+                            <div class="menuitem-root-text mt-3" style="display: block">
+                                USR NEVE
+                            </div>
+                            <a href="istruttorie.xhtml" style="display: block">
+                                ISTRUTTORIE
+                            </a>
+                        </li>
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                NUOVA
+                            </div>
+                            <a href="istruttoria.xhtml" style="display: block">
+                                NUOVA
+                            </a>
+                        </li>
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                STATISTICHE
+                            </div>
+                            <a href="stats.xhtml" style="display: block">
+                                STATISTICHE
+                            </a>
+                        </li>
+                        <ui:fragment rendered="#{utente.admin}">
+                            <li> 
+                                <div class="menuitem-root-text mt-3">
+                                    LAVORAZIONI
+                                </div>
+                                <a href="lavorazioni.xhtml" style="display: block">
+                                    LAVORAZIONI
+                                </a>
+                            </li>
+                        </ui:fragment> 
+                        <ui:fragment rendered="#{utente.admin}">
+                            <li class="active-menuitem"> 
+                                <div class="menuitem-root-text mt-3">
+                                    OO.PP.
+                                </div>
+                                <a href="oopp.xhtml" style="display: block">
+                                    OO.PP.
+                                </a>
+                            </li>
+                        </ui:fragment> 
+                        <li>  
+                            <div class="menuitem-root-text mt-3">
+                                ESCI
+                            </div>
+                            <a href="quit.xhtml" style="display: block">
+                                ESCI
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="layout-main" style="margin-left: 180px !important">
+                    <div class="layout-content documentation" id="doc">
+                        <div>
+                            <h5>OO.PP. Esporta dati visualizzati</h5>
+                            <p:commandButton value="XLS" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
+                                <p:dataExporter type="xls" target="dtOopp" fileName="oopp-#{istruttorieController.oggi}" pageOnly="true"/>
+                            </p:commandButton>
+
+                            <p:commandButton value="XLSX" styleClass="p-mr-2 p-mb-2 ui-button-outlined">
+                                <p:dataExporter type="xlsx" target="dtOopp" fileName="oopp-#{istruttorieController.oggi}" pageOnly="true"/>
+                            </p:commandButton>
+
+                            <h:panelGroup id="buttons" style="position: relative; float: right">
+                                <p:commandButton id="refresh" icon="pi pi-refresh" styleClass="ui-button-help" style="margin-right: 10px" action="#{OOPPController.ricarica()}" update="dtOopp">
+                                    <p:tooltip for="refresh" value="Aggiorna elenco" position="bottom"/>
+                                </p:commandButton>
+                                <p:commandButton value="Nuova" icon="pi pi-plus" style="margin-right: 10px" action="#{OOPPController.nuova()}"/>
+                                <p:commandButton value="Modifica" icon="pi pi-pencil" styleClass="ui-button-success" style="margin-right: 10px" disabled="#{empty OOPPController.selezionata}" action="#{OOPPController.modifica()}"/>
+                                <p:commandButton value="Elimina" icon="pi pi-trash" styleClass="ui-button-danger" style="margin-right: 10px" disabled="#{empty OOPPController.selezionata}" action="#{OOPPController.elimina()}">
+                                    <p:confirm type="popup" header="Conferma" message="Sicuri di voler eliminare il record #{OOPPController.selezionata.idPratica}?" icon="pi pi-exclamation-triangle"/>
+                                </p:commandButton>
+                            </h:panelGroup>
+                        </div>
+
+                        <div class="p-d-flex">     
+                            <p:dataTable id="dtOopp" var="op" value="#{OOPPController.oopp}" stripedRows="true" size="small" rowHover="true" reflow="true" emptyMessage="Nessun record presente o corrispondente ai criteri specificati."
+                                         widgetVar="opTable" rowKey="#{op.id}" scrollable="true" scrollWidth="95%" frozenColumns="5" filteredValue="#{OOPPController.filteredOopp}" selectionMode="single" selection="#{OOPPController.selezionata}"
+                                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" paginatorPosition="bottom"
+                                         currentPageReportTemplate="{startRecord}-{endRecord} di {totalRecords} istruttorie">
+                                <p:ajax event="filter" update="mainform:totals" />
+                                <p:ajax event="rowSelect" update="mainform:buttons" />
+                                <p:ajax event="rowUnselect" listener="#{OOPPController.setSelezionata(null)}" update="mainform:buttons" />
+
+                                <p:column headerText="# PRATICA" field="idPratica" width="120px" sortable="true" filterable="true" filterMatchMode="contains" />                                    
+                                <p:column headerText="ENTE" field="ente" width="200px" sortable="true" filterable="true" filterMatchMode="contains" styleClass="truncate"/>
+                                <p:column headerText="PROV." field="prov" width="70px" sortable="true" filterable="true" filterMatchMode="contains"/>
+                                <p:column headerText="PRI." field="priorita" width="60px" sortable="true"/>
+                                <p:column headerText="LOCALIZZ." field="localizzazione" width="250px" filterable="true" filterMatchMode="contains" styleClass="truncate" />
+                                <p:column headerText="OGGETTO" field="oggetto" width="550px" filterable="true" filterMatchMode="contains" styleClass="truncate" />                                    
+                                <p:column headerText="SOGG. ATT." field="attuatore" width="250px" filterable="true" filterMatchMode="contains" styleClass="truncate"/>
+                                <p:column headerText="CONTO TU" field="contoTu" width="120px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="IMPORTO" field="importoAssegnato" width="150px" sortable="true" filterable="false">
+                                    <h:outputText value="#{op.importoAssegnato}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="CUP" field="cup" width="140px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="STATO" field="idStato.descrizione" width="120px" filterable="true" filterMatchMode="contains"/>
+
+                                <p:column headerText="ANTIC. 10%" width="150px">
+                                    <h:outputText value="#{op.panticImporto}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="DECRETO" field="panticNDecreto" width="100px" filterable="true" filterMatchMode="contains"/>
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.panticDataDecreto}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="MANDATO" field="panticNMandato" width="110px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.panticDataMandato}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="ANTIC. 20%" width="150px">
+                                    <h:outputText value="#{op.santicImporto}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="DECRETO" field="santicNDecreto" width="100px" filterable="true" filterMatchMode="contains"/>
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.santicDataDecreto}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="MANDATO" field="santicNMandato" width="110px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.santicDataMandato}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="1° SAL" width="150px">
+                                    <h:outputText value="#{op.psalImporto}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="DECRETO" field="psalNDecreto" width="100px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.psalDataDecreto}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="MANDATO" field="psalNMandato" width="110px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.psalDataMandato}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="2° SAL" width="150px">
+                                    <h:outputText value="#{op.ssalImporto}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="DECRETO" field="ssalNDecreto" width="100px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.ssalDataDecreto}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="MANDATO" field="ssalNMandato" width="110px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.ssalDataMandato}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="SALDO" width="150px">
+                                    <h:outputText value="#{op.saldoImporto}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="DECRETO" field="saldoNDecreto" width="100px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.saldoDataDecreto}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="MANDATO" field="saldoNMandato" width="110px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.saldoDataMandato}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="EROGATO" width="150px">
+                                    <h:outputText value="#{OOPPController.erogato(op)}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="DISPONIBILITA'" width="150px">
+                                    <h:outputText value="#{OOPPController.rimanenza(op)}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="ECONOMIE" width="150px">
+                                    <h:outputText value="#{op.economie}">
+                                        <f:convertNumber pattern="#,##0.00 €" />
+                                    </h:outputText>
+                                </p:column>                               
+                            </p:dataTable> 
+                        </div>                    
+                        <p:panel id="totals">     
+                            <span class="p-text-bold"><span class="red">#{fn:length(OOPPController.filteredOopp)}</span> istruttorie in elenco per un totale erogato di <span class="red">#{OOPPController.decimalFormat(OOPPController.totaleErogato, '#,##0.00 €')}</span> su <span class="red">#{OOPPController.decimalFormat(OOPPController.totaleAssegnato, '#,##0.00 €')}</span> 
+                                (#{OOPPController.decimalFormat(OOPPController.rapporto, '##0.0%')}). Rimanenza: <span class="red">#{OOPPController.decimalFormat(OOPPController.totaleRimanenza, '#,##0.00 €')}</span>.</span> 
+                        </p:panel>       
+
+                        <p:confirmPopup global="true">
+                            <p:commandButton value="No" type="button" styleClass="ui-confirm-popup-no ui-button-flat"/>
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirm-popup-yes" />
+                        </p:confirmPopup>
+                    </div>                
+                </div>
+
+                <div id="layout-mask" class="layout-mask"></div>
+            </main>
+        </h:form>
+    </h:body>
+</html>
