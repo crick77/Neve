@@ -178,6 +178,16 @@ public class Oopp implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date saldoDataMandato;
     private BigDecimal economie;
+    @Size(max = 10)    
+    private String anacprotrich;
+    @Temporal(TemporalType.DATE)
+    private Date anacdatarich;
+    @Size(max = 10)    
+    private String anacprotrisc;
+    @Temporal(TemporalType.DATE)
+    private Date anacdatarisc;
+    @Size(max = 64)    
+    private String anacesitorisc;
     @Basic(optional = false)
     @NotNull
     private long version;
@@ -520,6 +530,46 @@ public class Oopp implements Serializable {
         this.idStato = idStato;
     }
 
+    public String getAnacprotrich() {
+        return anacprotrich;
+    }
+
+    public void setAnacprotrich(String anacprotrich) {
+        this.anacprotrich = anacprotrich;
+    }
+
+    public Date getAnacdatarich() {
+        return anacdatarich;
+    }
+
+    public void setAnacdatarich(Date anacdatarich) {
+        this.anacdatarich = anacdatarich;
+    }
+
+    public String getAnacprotrisc() {
+        return anacprotrisc;
+    }
+
+    public void setAnacprotrisc(String anacprotrisc) {
+        this.anacprotrisc = anacprotrisc;
+    }
+
+    public Date getAnacdatarisc() {
+        return anacdatarisc;
+    }
+
+    public void setAnacdatarisc(Date anacdatarisc) {
+        this.anacdatarisc = anacdatarisc;
+    }
+
+    public String getAnacesitorisc() {
+        return anacesitorisc;
+    }
+
+    public void setAnacesitorisc(String anacesitorisc) {
+        this.anacesitorisc = anacesitorisc;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

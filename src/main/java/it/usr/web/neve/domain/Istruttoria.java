@@ -7,6 +7,7 @@ package it.usr.web.neve.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,6 +21,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -101,7 +104,7 @@ public class Istruttoria implements Serializable {
     private String note;
     @Basic(optional = true)    
     @Size(max = 255)
-    private String documento;
+    private String documento;    
     @Basic(optional = false)
     @NotNull
     @Version
@@ -303,8 +306,8 @@ public class Istruttoria implements Serializable {
 
     public void setProprietario(Utente proprietario) {
         this.proprietario = proprietario;
-    }
-
+    }   
+    
     @Override
     public int hashCode() {
         int hash = 0;

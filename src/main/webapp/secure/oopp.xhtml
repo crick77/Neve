@@ -22,6 +22,10 @@
                 white-space: nowrap;                
                 text-overflow: ellipsis;
             }
+            .tooltip-wrap {
+                max-width: 400px;
+                white-space: pre-wrap;
+            }
         </style>
 
         <f:metadata>
@@ -136,12 +140,24 @@
                                 <p:ajax event="rowUnselect" listener="#{OOPPController.setSelezionata(null)}" update="mainform:buttons" />
 
                                 <p:column headerText="# PRATICA" field="idPratica" width="120px" sortable="true" filterable="true" filterMatchMode="contains" />                                    
-                                <p:column headerText="ENTE" field="ente" width="200px" sortable="true" filterable="true" filterMatchMode="contains" styleClass="truncate"/>
+                                <p:column headerText="ENTE" field="ente" width="200px" sortable="true" filterable="true" filterMatchMode="contains" styleClass="truncate">                                  
+                                    <h:outputText id="ente" value="#{op.ente}" />
+                                    <p:tooltip for="ente" value="#{op.ente}" styleClass="tooltip-wrap"/>
+                                </p:column>   
                                 <p:column headerText="PROV." field="prov" width="70px" sortable="true" filterable="true" filterMatchMode="contains"/>
                                 <p:column headerText="PRI." field="priorita" width="60px" sortable="true"/>
-                                <p:column headerText="LOCALIZZ." field="localizzazione" width="250px" filterable="true" filterMatchMode="contains" styleClass="truncate" />
-                                <p:column headerText="OGGETTO" field="oggetto" width="550px" filterable="true" filterMatchMode="contains" styleClass="truncate" />                                    
-                                <p:column headerText="SOGG. ATT." field="attuatore" width="250px" filterable="true" filterMatchMode="contains" styleClass="truncate"/>
+                                <p:column headerText="LOCALIZZ." field="localizzazione" width="250px" filterable="true" filterMatchMode="contains" styleClass="truncate">
+                                    <h:outputText id="localizzazione" value="#{op.localizzazione}" />
+                                    <p:tooltip for="localizzazione" value="#{op.localizzazione}" styleClass="tooltip-wrap"/>
+                                </p:column>    
+                                <p:column headerText="OGGETTO" field="oggetto" width="550px" filterable="true" filterMatchMode="contains" styleClass="truncate">
+                                    <h:outputText id="oggetto" value="#{op.oggetto}" />
+                                    <p:tooltip for="oggetto" value="#{op.oggetto}" styleClass="tooltip-wrap"/>                                    
+                                </p:column>
+                                <p:column headerText="SOGG. ATT." field="attuatore" width="250px" filterable="true" filterMatchMode="contains" styleClass="truncate">
+                                    <h:outputText id="attuatore" value="#{op.attuatore}" />
+                                    <p:tooltip for="attuatore" value="#{op.attuatore}" styleClass="tooltip-wrap"/>
+                                </p:column>
                                 <p:column headerText="CONTO TU" field="contoTu" width="120px" filterable="true" filterMatchMode="contains" />
                                 <p:column headerText="IMPORTO" field="importoAssegnato" width="150px" sortable="true" filterable="false">
                                     <h:outputText value="#{op.importoAssegnato}">
@@ -169,6 +185,24 @@
                                     </h:outputText>
                                 </p:column>
 
+                                <p:column headerText="PROT. RICH. ANAC" field="anacprotrich" width="170px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.anacdatarich}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                
+                                <p:column headerText="PROT. RISC. ANAC" field="anacprotrisc" width="170px" filterable="true" filterMatchMode="contains" />
+                                <p:column headerText="DEL" width="100px">
+                                    <h:outputText value="#{op.anacdatarisc}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column  headerText="ESITO. RISC. ANAC" field="anacesitorisc" width="200px" filterable="true" filterMatchMode="contains" styleClass="truncate">
+                                    <h:outputText id="anacesitorisc" value="#{op.anacesitorisc}" />
+                                    <p:tooltip for="anacesitorisc" value="#{op.anacesitorisc}" styleClass="tooltip-wrap" />
+                                </p:column>
+                                
                                 <p:column headerText="ANTIC. 20%" width="150px">
                                     <h:outputText value="#{op.santicImporto}">
                                         <f:convertNumber pattern="#,##0.00 €" />

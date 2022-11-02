@@ -207,6 +207,29 @@
                             </div>
                             
                             <div class="p-field">
+                                <label for="anacProtRich">ANAC PROTOCOLLO RICHIESTA</label>
+                                <p:inputText id="anacProtRich" value="#{OPController.op.anacprotrich}" maxlength="10" />
+                            </div>
+                            <div class="p-field">
+                                <label for="anacDataRich">ANAC DATA RICHIESTA</label>
+                                <p:datePicker id="anacDataRich" value="#{OPController.op.anacdatarich}" showIcon="true" locale="it"/>
+                            </div>
+                            
+                            <div class="p-field">
+                                <label for="anacProtRisc">ANAC PROTOCOLLO RISCONTRO</label>
+                                <p:inputText id="anacProtRisc" value="#{OPController.op.anacprotrisc}" maxlength="10" />
+                            </div>
+                            <div class="p-field">
+                                <label for="anacDataRisc">ANAC DATA RISCONTRO</label>
+                                <p:datePicker id="anacDataRisc" value="#{OPController.op.anacdatarisc}" showIcon="true" locale="it"/>
+                            </div>
+                            <div class="p-field">
+                                <label for="anacEsitoRisc">ANAC ESITO RISCONTRO</label>
+                                <p:inputText id="anacEsitoRisc" value="#{OPController.op.anacesitorisc}" maxlength="64"/>
+                            </div>
+                            
+                            
+                            <div class="p-field">
                                 <label for="santicImporto">IMPORTO ANTICIPO 20%</label>
                                 <p:inputNumber id="santicImporto" value="#{OPController.op.santicImporto}" minValue="0" symbol=" €" symbolPosition="s" decimalSeparator="," thousandSeparator="." decimalPlaces="2" decimalSeparatorAlternative="." modifyValueOnWheel="false"/>
                             </div>
